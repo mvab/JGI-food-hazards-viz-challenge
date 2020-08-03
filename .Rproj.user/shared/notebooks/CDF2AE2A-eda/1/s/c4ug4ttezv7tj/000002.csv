@@ -1,7 +1,0 @@
-"0","data %>% 
-  select(-link, -brand, -manufacturer, -raw_text_product, -organisation, -date_added, -date_added_year) %>% 
-  add_coordinates() %>% 
-  write_tsv(""food_hazards_data_all.csv"")
-"
-"2","Error in add_coordinates(.) : could not find function ""add_coordinates""
-"

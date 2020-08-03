@@ -1,6 +1,0 @@
-"0","foreign_all %>% 
-  select(-link, -brand, -manufacturer, -raw_text_product, -organisation, -date_added, -date_added_year) %>% 
-  add_coordinates() %>% 
-  write_tsv(""food_hazards_foreign_bodies.csv"")
-"
-"2","for resolution='high' option you need to install package rworldxtra, using low resolution version for now"

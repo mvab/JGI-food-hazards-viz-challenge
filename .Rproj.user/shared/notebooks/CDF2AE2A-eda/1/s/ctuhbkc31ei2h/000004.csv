@@ -1,3 +1,0 @@
-"0","test <- add_coordinates(foreign_all)
-"
-"2","for resolution='high' option you need to install package rworldxtra, using low resolution version for now"

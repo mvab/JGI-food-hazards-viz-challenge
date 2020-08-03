@@ -1,5 +1,0 @@
-"0","data %>% select(date_published, data_source, alert_type, product_categoty, product, origin_country, notified_country, hazard_description, hazard_group) %>% vis_cor()
-"
-"2","Error in vis_cor(.) : 
-  data input can only contain numeric values, please subset the data to the numeric values you would like.
-"
