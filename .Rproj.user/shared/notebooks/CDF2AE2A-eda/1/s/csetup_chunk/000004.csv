@@ -1,0 +1,92 @@
+"0","knitr::opts_chunk$set(echo = TRUE, fig.width = 12, fig.height = 8, warning = F, message = F)"
+"0","library(rgeos)"
+"2","package ‘rgeos’ was built under R version 4.0.2"
+"2","Loading required package: sp
+"
+"2","rgeos version: 0.5-3, (SVN revision 634)
+ GEOS runtime version: 3.8.1-CAPI-1.13.3 
+ Linking to sp version: 1.4-2 
+ Polygon checking: TRUE 
+
+"
+"0","library(rworldmap)"
+"2","package ‘rworldmap’ was built under R version 4.0.2"
+"2","### Welcome to rworldmap ###
+"
+"2","For a short introduction type : 	 vignette('rworldmap')
+"
+"0","library(readxl)"
+"2","package ‘readxl’ was built under R version 4.0.2"
+"0","library(readr)"
+"0","library(dplyr)"
+"2","
+Attaching package: ‘dplyr’
+
+"
+"2","The following objects are masked from ‘package:rgeos’:
+
+    intersect, setdiff, union
+
+"
+"2","The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+"
+"2","The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+"
+"0","library(tidyr)"
+"0",""
+"0","library(stringr)"
+"0","library(lubridate)"
+"2","
+Attaching package: ‘lubridate’
+
+"
+"2","The following objects are masked from ‘package:rgeos’:
+
+    intersect, setdiff, union
+
+"
+"2","The following objects are masked from ‘package:base’:
+
+    date, intersect, setdiff, union
+
+"
+"0","library(visdat)"
+"2","package ‘visdat’ was built under R version 4.0.2"
+"0","library(ggplot2)"
+"0","library(hrbrthemes)"
+"2","package ‘hrbrthemes’ was built under R version 4.0.2"
+"2","Registered S3 methods overwritten by 'htmltools':
+  method               from         
+  print.html           tools:rstudio
+  print.shiny.tag      tools:rstudio
+  print.shiny.tag.list tools:rstudio
+"
+"0","library(cowplot)"
+"2","
+********************************************************
+"
+"2","Note: As of version 1.0.0, cowplot does not change the
+"
+"2","  default ggplot2 theme anymore. To recover the previous
+"
+"2","  behavior, execute:
+  theme_set(theme_cowplot())
+"
+"2","********************************************************
+
+"
+"2","
+Attaching package: ‘cowplot’
+
+"
+"2","The following object is masked from ‘package:lubridate’:
+
+    stamp
+
+"

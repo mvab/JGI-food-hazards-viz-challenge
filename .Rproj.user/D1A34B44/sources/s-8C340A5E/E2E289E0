@@ -1,0 +1,33 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1595872998051.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "E2E289E0",
+    "lastKnownWriteTime" : 140472517567073,
+    "last_content_update" : 1595872998051,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "76E896DF",
+        "caption" : "dat9",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=dat9&cache_key=76E896DF",
+        "displayedObservations" : 2126,
+        "environment" : "",
+        "expression" : "dat9",
+        "object" : "dat9",
+        "preview" : 0,
+        "totalObservations" : 2126,
+        "variables" : 30
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_dataframe"
+}
