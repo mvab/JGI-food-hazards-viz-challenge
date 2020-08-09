@@ -1,0 +1,119 @@
+---
+title: "Food hazards - allergens"
+author: "Marina Vabistsevits"
+date: "09/08/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, fig.width = 12, fig.height = 8, warning = F, message = F)
+
+library(readr)
+library(dplyr)
+library(tidyr)
+
+library(stringr)
+library(lubridate)
+
+library(visdat)
+library(ggplot2)
+library(hrbrthemes)
+library(cowplot)
+
+library(plotly)
+
+```
+
+
+```{r message=F}
+data_all<-read_tsv("../data/tidy/food_hazards_data_all.tsv")
+```
+
+```{r}
+data_all %>% count(hazard_group, sort=T)
+
+data_all %>% filter(hazard_group ==  "allergens") %>%  count(hazard_description, sort=T)
+
+allergens_all <- data_all %>% filter(hazard_group ==  "allergens") 
+```
+
+
+```{r}
+allergens_all <- allergens_all %>% 
+  mutate(hazard_type = ifelse(grepl("milk|dairy", hazard_description), "milk", 
+                       ifelse(grepl("lacto", hazard_description), "lactose", 
+                       ifelse(grepl("egg", hazard_description), "egg", 
+                       ifelse(grepl("mustard", hazard_description), "mustard", 
+                       ifelse(grepl("sesame", hazard_description), "sesame", 
+                       ifelse(grepl("wheat", hazard_description), "wheat", 
+                       ifelse(grepl("sulphite", hazard_description), "sulphite", 
+                       ifelse(grepl("gluten", hazard_description), "gluten", 
+                       ifelse(grepl("celery", hazard_description), "celery", 
+                       ifelse(grepl("soy", hazard_description), "soy", 
+                       ifelse(grepl("oats", hazard_description), "oats", 
+                       ifelse(grepl("barley", hazard_description), "barley", 
+                       ifelse(grepl("fish|shrimp|crustacean|mollusc", hazard_description), "seafood", 
+                       ifelse(grepl("almond", hazard_description), "almond", 
+                       ifelse(grepl("walnut", hazard_description), "walnut", 
+                       ifelse(grepl("hazelnut", hazard_description), "hazelnut",
+                       ifelse(grepl("cashew", hazard_description), "cashew", 
+                       ifelse(grepl("pistachio", hazard_description), "pistachio", 
+                       ifelse(grepl("macadamia", hazard_description), "macadamia nuts", 
+                       ifelse(grepl("brazil", hazard_description), "brazil nuts", 
+                       ifelse(grepl("pine", hazard_description), "pine nuts", 
+                       ifelse(grepl("peanut", hazard_description), "peanut",
+                       ifelse(grepl("nut", hazard_description), "unnamed nuts", 
+                              "other/unknown allergic reaction"
+                       )))))))))))))))))))))))) %>% 
+    # create a more general group
+    mutate(hazard_type_large = ifelse(hazard_type %in% c("almond","walnut", "hazelnut",
+                                                         "cashew", "pistachio", "macadamia nuts", 
+                                                         "brazil nuts", "pine nuts",
+                                                         "unnamed nuts", "peanut" ), "nuts",
+                               ifelse(hazard_type %in% c("milk", "lactose"), "milk-related",
+                                ifelse(hazard_type %in% c("gluten", "wheat", "barley"), "gluten-related",hazard_type))))
+            
+
+  
+  
+allergens_all %>%   count(hazard_type, sort=T)
+
+allergens_all %>%   count(hazard_type_large, sort=T)
+
+#allergens_all %>% 
+#  select("ID", "hazard_description","hazard_type",  "product_categoty" , "product" , "summary") %>% 
+#  filter(is.na(hazard_type)) 
+  
+  
+```
+
+
+```{r}
+dat<-allergens_all %>% 
+  group_by(hazard_type_large) %>%
+  filter(n()>10) %>% 
+  ungroup %>% 
+  select(hazard_type, hazard_type_large, product, hazard_description, date_published_year_month, ID_incident)  %>% distinct() %>% 
+  group_by(hazard_type_large, date_published_year_month) %>% 
+  mutate(count = n())%>%
+  distinct() 
+
+# sort by group size
+dat$hazard_type_large <- factor(dat$hazard_type_large, levels = allergens_all %>%   count(hazard_type_large, sort=T) %>% pull(1))
+
+p <-ggplot(data = dat, aes(x = date_published_year_month  , y = count, group = hazard_type_large, label1 = product, label2 = hazard_description)) +
+  #geom_line(aes(color = hazard_type_large, alpha = 1), size = 1) +
+  geom_point(aes(color = hazard_type_large, alpha = 1), size = 1) +
+  geom_smooth(aes(x = date_published_year_month  , y = count, color = hazard_type_large))+
+  theme(legend.position = "right", ncol=1) +
+  theme_minimal_hgrid(9, rel_small = 1) +
+  labs(x = "year",  colour="Allergen type",
+       y = "counts",
+       title = "")+
+    guides(alpha = FALSE) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+p
+
+ply <- ggplotly(p)
+```
+
