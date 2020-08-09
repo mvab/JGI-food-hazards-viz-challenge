@@ -597,7 +597,7 @@ foreign_all<-foreign_all %>%
 foreign_all %>% 
   select(-link, -brand, -manufacturer, -raw_text_product, -organisation, -date_added, -date_added_year) %>% 
   add_coordinates() %>% 
-  write_tsv("../data/food_hazards_foreign_bodies.csv")
+  write_tsv("../data/food_hazards_foreign_bodies.tsv")
 
 ```
 
@@ -609,6 +609,6 @@ foreign_all %>%
 data %>% 
   select(-link, -brand, -manufacturer, -raw_text_product, -organisation, -date_added, -date_added_year) %>% 
   add_coordinates() %>% 
-  write_tsv("../data/food_hazards_data_all.csv")
+  write_tsv("../data/food_hazards_data_all.tsv")
 ```
 
