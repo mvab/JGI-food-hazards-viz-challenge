@@ -3,6 +3,8 @@ kepler/.ipynb_checkpoints/*
 .ipynb_checkpoints
 */.ipynb_checkpoints/*
 
+# Mac custom attribute dfiles
+*.DS_Store
 
 # History files
 .Rhistory
