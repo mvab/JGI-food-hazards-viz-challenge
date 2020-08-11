@@ -1,5 +1,0 @@
-- Use Kepler to show which events happened where, with lines/arcs from country of origin to notifying country
-    - Temporal aspect- iterate through weeks/months and filter based on that
-    - Focus on just 'recall' events for now
-    - Start by working with just 'allergen' events
-        - But could include others as project progresses
