@@ -5,6 +5,7 @@ kepler/.ipynb_checkpoints/*
 
 # Mac custom attribute dfiles
 *.DS_Store
+*.idea/
 
 # History files
 .Rhistory
