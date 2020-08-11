@@ -74,7 +74,7 @@ allergens_all <- allergens_all %>%
                                 ifelse(hazard_type %in% c("gluten", "wheat", "barley"), "gluten-related",hazard_type))))
             
 
-  
+write_tsv(allergens_all, "../data/tidy/food_hazards_data_allergens_tidy.tsv")  
   
 allergens_all %>%   count(hazard_type, sort=T)
 
