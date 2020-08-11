@@ -612,3 +612,124 @@ data %>%
   write_tsv("../data/food_hazards_data_all.tsv")
 ```
 
+
+### Add random coordinates
+```{r}
+library(sp)
+library(maptools)
+data(wrld_simpl) # load data 
+
+data_all<-read_tsv("../data/tidy/food_hazards_data_all.tsv")
+
+
+# update names in data to match source of coordiantes
+input<- data_all %>% 
+    mutate( origin_country = case_when(origin_country ==  "United States of America" ~ "United States",
+                                            origin_country == "Hong Kong S.A.R." ~ "Hong Kong",
+                                            origin_country ==  "Republic of Serbia" ~ "Serbia", 
+                                            origin_country =="Vietnam" ~ "Viet Nam",
+                                            origin_country =="South Korea" ~ "Korea, Republic of",
+                                            origin_country =="Iran" ~ "Iran (Islamic Republic of)",
+                                            origin_country =="Syria" ~ "Syrian Arab Republic",
+                                            origin_country =="Laos" ~ "Lao People's Democratic Republic",
+                                            origin_country =="Moldova" ~ "Republic of Moldova",
+                                            origin_country =="Brunei" ~ "Brunei Darussalam",
+                                            origin_country =="Kosovo" ~ "Serbia",
+                                            origin_country =="Myanmar" ~ "Burma",
+                                            TRUE ~ origin_country)) %>% 
+     mutate( notified_country = case_when(notified_country ==  "United States of America" ~ "United States",
+                                            notified_country == "Hong Kong S.A.R." ~ "Hong Kong",
+                                            notified_country ==  "Republic of Serbia" ~ "Serbia", 
+                                            notified_country =="Vietnam" ~ "Viet Nam",
+                                            notified_country =="South Korea" ~ "Korea, Republic of",
+                                            notified_country =="Iran" ~ "Iran (Islamic Republic of)",
+                                            notified_country =="Syria" ~ "Syrian Arab Republic",
+                                            notified_country =="Laos" ~ "Lao People's Democratic Republic",
+                                            notified_country =="Moldova" ~ "Republic of Moldova",
+                                            notified_country =="Brunei" ~ "Brunei Darussalam",
+                                            notified_country =="Kosovo" ~ "Serbia",
+                                            notified_country =="Myanmar" ~ "Burma",
+                                            TRUE ~ notified_country))
+                                            
+
+get_random_cooor_single <- function(country_name){
+  
+  if (!country_name %in% wrld_simpl$NAME){
+    stop(paste0("Polygon not available for ", country_name))
+  }
+  
+  # get country polygon
+  sw <- slot(wrld_simpl[wrld_simpl$NAME == country_name,], "polygons")[[1]]
+  # sample a random coord (n) within that polygon
+  rpoints <- sp::spsample(sw, n = 1, type = "random") %>% as.data.frame() # long-lat
+  # convert to vector
+  rpoints_vec <- paste(as.numeric(rpoints[1,]), collapse = ",")
+
+  return(rpoints_vec)
+}
+ 
+
+get_random_cooor <- function(country_name, n){
+  
+  if (!country_name %in% wrld_simpl$NAME){
+    stop(paste0("Polygon not available for ", country_name))
+  }
+  
+  # get country polygon
+  sw <- slot(wrld_simpl[wrld_simpl$NAME == country_name,], "polygons")[[1]]
+  # sample a random coord (n) within that polygon
+  rpoints <- sp::spsample(sw, n = n, type = "random") %>% as.data.frame() # long-lat
+  colnames(rpoints) <- c("long", "lat")
+  
+  return(rpoints)
+}
+
+## Create random coords for Origin countries
+
+subset_origin <-input %>% select(ID, origin_country)
+origin_coords <- data.frame()
+
+for (country in unique(subset_origin$origin_country) ){
+  # subset to country
+  country_subset<-subset_origin %>% filter(origin_country == country)
+  # generate rand coords for n cases
+  tmp<-get_random_cooor(country, n = dim(country_subset)[1])
+  # addign them to case IDs (order does not matter)
+  tmp2<-cbind(country_subset, tmp)
+  
+  # merge into df that will hold all coords for origin data points
+  origin_coords <- rbind(origin_coords, tmp2)
+}
+colnames(origin_coords)[3:4] <- c('long.origin.rand', 'lat.origin.rand')
+
+## Create random coords for Notified countries
+
+subset_notified <-input %>% select(ID, notified_country)
+notified_coords <- data.frame()
+
+for (country in unique(subset_notified$notified_country) ){
+  # subset to country
+  country_subset<-subset_notified %>% filter(notified_country == country)
+  # generate rand coords for n cases
+  tmp<-get_random_cooor(country, n = dim(country_subset)[1])
+  # addign them to case IDs (order does not matter)
+  tmp2<-cbind(country_subset, tmp)
+  
+  # merge into df that will hold all coords for notified data points
+  notified_coords <- rbind(notified_coords, tmp2)
+}
+colnames(notified_coords)[3:4] <- c('long.notified.rand', 'lat.notified.rand')
+
+
+## merge new rand coords by case ID inro one df
+coords_rand <- full_join(origin_coords, notified_coords, by="ID") %>% 
+               select(-origin_country, -notified_country)
+
+
+## add new random coords to the main dataset 
+data_all_upd <- full_join(data_all, coords_rand, by ="ID")
+
+write_csv(data_all_upd, "../data/food_hazards_data_all.csv")
+
+```
+
