@@ -1,0 +1,273 @@
+---
+title: "EDA_plastic"
+author: "Marina Vabistsevits"
+date: "12/08/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, fig.width = 12, fig.height = 8, warning = F, message = F)
+
+library(readr)
+library(dplyr)
+library(tidyr)
+
+library(stringr)
+library(lubridate)
+
+library(visdat)
+library(ggplot2)
+library(hrbrthemes)
+library(cowplot)
+
+library(plotly)
+
+```
+
+
+```{r message=F}
+data_all<-read_tsv("../data/tidy/food_hazards_data_all.tsv")
+```
+
+
+# Foreign bodies - e.g. exploring plastic pollution
+
+```{r}
+
+foreign <- data_all %>% 
+  filter(hazard_group == "foreign bodies") %>% 
+  mutate(contaminant = ifelse(str_detect(hazard_description, "(?i)plastic"), "plastic",
+                       ifelse(str_detect( raw_text_product, "(?i)plastic"), "plastic", 
+                       ifelse(str_detect(hazard_description, "(?i)polystyrene"), "plastic", 
+                       ifelse(str_detect(hazard_description, "(?i)film"), "plastic",    
+                       ifelse(str_detect(hazard_description, "(?i)nylon"), "plastic",  
+                       ifelse(str_detect(raw_text_product, "(?i)rubber"), "plastic",
+                       ifelse(str_detect(raw_text_product, "(?i)conveyor belt"), "plastic",
+                       ifelse(str_detect(raw_text_product, "(?i)blue particles"), "plastic",
+                       ifelse(str_detect(raw_text_product, "(?i)white and blue"), "plastic",
+                       ifelse(str_detect(raw_text_product, "(?i)packaging tape"), "plastic",
+                              
+                       ifelse(str_detect(hazard_description, "(?i)glass"), "glass", 
+                       ifelse(str_detect( raw_text_product, "(?i)glass"), "glass",
+                              
+                       ifelse(str_detect(hazard_description, "(?i)metal"), "metal", 
+                       ifelse(str_detect( raw_text_product, "(?i)metal"), "metal",
+                       ifelse(str_detect( raw_text_product, "(?i)blade"), "metal",
+                       ifelse(str_detect( raw_text_product, "(?i)aluminum"), "metal",
+                       ifelse(str_detect( raw_text_product, "(?i)iron"), "metal",
+                       ifelse(str_detect( raw_text_product, "(?i)sharp"), "metal",
+                       ifelse(str_detect( raw_text_product, "(?i)needle"), "metal",
+                       ifelse(str_detect(hazard_description, "(?i)wires"), "metal",   
+                       ifelse(str_detect(hazard_description, "(?i)nails"), "metal",   
+                       ifelse(str_detect(summary, "(?i)foil"), "metal",   
+                              
+                       ifelse(str_detect(hazard_description, "(?i)insect"), "insects",  
+                       ifelse(str_detect(raw_text_product, "(?i)insect"), "insects",  
+                              
+                       ifelse(str_detect(hazard_description, "(?i)bone"), "bone", 
+                       ifelse(str_detect( raw_text_product, "(?i)bone"), "bone",
+                              
+                       ifelse(str_detect(hazard_description, "(?i)wood"), "wood",  
+                       ifelse(str_detect(raw_text_product, "(?i)wood"), "wood",    
+                              
+                       ifelse(str_detect(raw_text_product, "(?i)paper"), "paper", 
+                       ifelse(str_detect(raw_text_product, "(?i)carton"), "paper", 
+                       ifelse(str_detect(raw_text_product, "(?i)cardboard"), "paper",  
+                              
+                       ifelse(str_detect(raw_text_product, "(?i)soil"), "stones or soil", 
+                       ifelse(str_detect(raw_text_product, "(?i)sand "), "stones or soil", 
+                       ifelse(str_detect(raw_text_product, "(?i)pebble"), "stones or soil",   
+                       ifelse(str_detect(raw_text_product, "(?i)stone"), "stones or soil", 
+                       ifelse(str_detect(raw_text_product, "(?i)gravel"), "stones or soil", 
+                       ifelse(str_detect(raw_text_product, "(?i)rock"), "stones or soil", 
+
+                       ifelse(str_detect(raw_text_product, "(?i)mice"), "rodents",           
+                       ifelse(str_detect(raw_text_product, "(?i)mouse"), "rodents",   
+                       ifelse(str_detect(raw_text_product, "(?i)rodent"), "rodents",  
+                              
+                       "other foreign body")))))))))))))))))))))))))))))))))))))))))
+
+                       
+```
+
+
+
+```{r}
+# by contaminant group
+
+dat7<-foreign %>% 
+  filter(date_published_year_month != "NA-NA") %>% 
+  group_by(contaminant) %>%
+  #filter(n()>500) %>% 
+  ungroup %>% 
+  select(contaminant, date_published_year_month, ID_incident) %>% distinct() %>% 
+  group_by(contaminant, date_published_year_month) %>% 
+  mutate(count = n())%>%
+  distinct() 
+
+pc7 <-ggplot(data = dat7, aes(x = date_published_year_month  , y = count, group = contaminant)) +
+  #geom_line(aes(color = contaminant, alpha = 1), size = 1) +
+  geom_point(aes(color = contaminant, alpha = 1), size = 3) +
+  geom_smooth(aes(x = date_published_year_month  , y = count, color = contaminant))+
+  #scale_x_continuous(breaks = sort(unique(dat$date_published_year))[c(TRUE, FALSE)]  )+
+  theme(legend.position = "right", ncol=1) +
+  #scale_colour_manual(values=c(pal))+
+  theme_minimal_hgrid(9, rel_small = 1) +
+  labs(x = "year",  colour="hazard group",
+       y = "counts",
+       title = "")+
+    guides(alpha = FALSE) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+pc7
+```
+
+
+```{r}
+## try to get contaminant from other groups
+
+foreign_extra <- data_all %>% 
+  filter(hazard_group != "foreign bodies") %>% 
+  mutate(contaminant = ifelse(str_detect(hazard_description, "(?i)plastic"), "plastic",
+                       ifelse(str_detect( raw_text_product, "(?i)plastic"), "plastic", 
+                       ifelse(str_detect(hazard_description, "(?i)polystyrene"), "plastic", 
+                       ifelse(str_detect(hazard_description, "(?i)film"), "plastic",    
+                       ifelse(str_detect(hazard_description, "(?i)nylon"), "plastic",  
+                       ifelse(str_detect(raw_text_product, "(?i)rubber"), "plastic",
+                       ifelse(str_detect(raw_text_product, "(?i)conveyor belt"), "plastic",
+                       ifelse(str_detect(raw_text_product, "(?i)blue particles"), "plastic",
+                       ifelse(str_detect(raw_text_product, "(?i)white and blue"), "plastic",
+                       ifelse(str_detect(raw_text_product, "(?i)packaging tape"), "plastic",
+                              
+                       ifelse(str_detect(hazard_description, "(?i)metal"), "metal", 
+                       ifelse(str_detect( raw_text_product, "(?i)metal"), "metal",
+                       ifelse(str_detect( raw_text_product, "(?i)blade"), "metal",
+                       ifelse(str_detect( raw_text_product, "(?i)aluminum"), "metal",
+                       ifelse(str_detect( raw_text_product, "(?i) iron"), "metal",
+                       ifelse(str_detect( raw_text_product, "(?i)sharp"), "metal",
+                       ifelse(str_detect( raw_text_product, "(?i)needle"), "metal",
+                       ifelse(str_detect(hazard_description, "(?i)wires"), "metal",   
+                       ifelse(str_detect(hazard_description, "(?i)nails"), "metal",   
+                       ifelse(str_detect(summary, "(?i)foil"), "metal",   
+                              
+                       ifelse(str_detect(hazard_description, "(?i)glass"), "glass", 
+                       ifelse(str_detect( raw_text_product, "(?i)glass"), "glass",      
+                              
+                       ifelse(str_detect(hazard_description, "(?i)insect"), "insects",  
+                       ifelse(str_detect(raw_text_product, "(?i)insect"), "insects",  
+                      
+                              
+                       "other foreign body"))))))))))))))))))))))))) %>% 
+  filter(contaminant != "other foreign body") %>% 
+  filter(!(contaminant == "metal" & grepl("heavy metal|metallic|Lead|alkaloid|metalaxyl", raw_text_product, ignore.case = T))) %>% 
+  filter(!(contaminant == "metal" & grepl("heavy metal|metallic|Lead|alkaloid", summary, ignore.case = T))) %>% 
+  filter(!(contaminant == "metal" & hazard_description %in% c("undeclared peanut", "unauthorised substance magnesium", 
+                                      "unauthorised substance iron glycinate chelate", "too high content of iron",
+                                      "salmonella outbreak" ,"salmonella spp sticks", "copper", "undesignated additive"))) %>% 
+  filter(!(contaminant %in% c("plastic", "glass") & !grepl("piece|foreign|extraneous|find|bits|particle|plastic in", raw_text_product, ignore.case = T)))
+
+
+```
+
+
+```{r}
+# add all contaminants
+
+dat8<-bind_rows(foreign, foreign_extra) %>% 
+  filter(date_published_year_month != "NA-NA") %>% 
+  group_by(contaminant) %>%
+  #filter(n()>500) %>% 
+  ungroup %>% 
+  select(contaminant, date_published_year_month, ID_incident) %>% distinct() %>% 
+  group_by(contaminant, date_published_year_month) %>% 
+  mutate(count = n())%>%
+  distinct() 
+
+pc8 <-ggplot(data = dat8, aes(x = date_published_year_month  , y = count, group = contaminant)) +
+  #geom_line(aes(color = contaminant, alpha = 1), size = 1) +
+  geom_point(aes(color = contaminant, alpha = 1), size = 3) +
+  geom_smooth(aes(x = date_published_year_month  , y = count, color = contaminant))+
+  #scale_x_continuous(breaks = sort(unique(dat$date_published_year))[c(TRUE, FALSE)]  )+
+  theme(legend.position = "right", ncol=1) +
+  #scale_colour_manual(values=c(pal))+
+  theme_minimal_hgrid(9, rel_small = 1) +
+  labs(x = "year",  colour="hazard group",
+       y = "counts",
+       title = "")+
+    guides(alpha = FALSE) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+pc8
+  
+```
+
+```{r}
+# only 4 cataegories
+
+dat9<-bind_rows(foreign, foreign_extra) %>% 
+  filter(date_published_year_month != "NA-NA") %>% 
+  filter(date_published_year_quarter   != "2020-Q2") %>% 
+  filter(contaminant %in% c("plastic", "metal", "glass", "insects")) %>% 
+  group_by(contaminant) %>%
+  #filter(n()>500) %>% 
+  ungroup %>% 
+  select(contaminant, date_published_year_month, date_published_year, date_published_year_quarter, ID_incident) %>% distinct() %>% 
+  group_by(contaminant, date_published_year_month, date_published_year, date_published_year_quarter) %>% 
+  mutate(count = n())%>%
+  distinct() 
+
+pc9 <-ggplot(data = dat9, aes(x = date_published_year_month  , y = count, group = contaminant)) +
+  #geom_line(aes(color = contaminant, alpha = 1), size = 1) +
+  geom_point(aes(color = contaminant, alpha = 1), size = 2) +
+  geom_smooth(aes(x = date_published_year_month  , y = count, color = contaminant))+
+  #scale_x_continuous(breaks = sort(unique(dat$date_published_year))[c(TRUE, FALSE)]  )+
+  theme(legend.position = "right", ncol=1) +
+  #scale_colour_manual(values=c(pal))+
+  theme_minimal_hgrid(9, rel_small = 1) +
+  labs(x = "year",  colour="hazard group",
+       y = "counts",
+       title = "")+
+    guides(alpha = FALSE) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+pc10 <-ggplot(data = dat9, aes(x = date_published_year_quarter  , y = count, group = contaminant)) +
+  #geom_line(aes(color = contaminant, alpha = 1), size = 1) +
+  geom_point(aes(color = contaminant, alpha = 1), size = 2) +
+  geom_smooth(aes(x = date_published_year_quarter  , y = count, color = contaminant))+
+  #scale_x_continuous(breaks = sort(unique(dat$date_published_year))[c(TRUE, FALSE)]  )+
+  theme(legend.position = "right", ncol=1) +
+  #scale_colour_manual(values=c(pal))+
+  theme_minimal_hgrid(9, rel_small = 1) +
+  labs(x = "year",  colour="hazard group",
+       y = "counts",
+       title = "")+
+    guides(alpha = FALSE) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  
+```
+
+```{r}
+foreign_all<-bind_rows(foreign, foreign_extra) 
+dim(foreign_all)
+
+foreign_all %>% count(origin_country, sort=T)
+foreign_all %>% count(notified_country, sort=T)
+
+```
+
+```{r}
+foreign_all %>% count(alert_type, sort=T)
+foreign_all %>% count(product_categoty, sort=T)
+foreign_all %>% count(contaminant, sort=T)
+
+foreign_all<-foreign_all %>%
+  mutate(contaminant2 = ifelse(contaminant %in% c("wood", "rodents", "bone","stones or soil", "paper"), "other foreign body", contaminant))
+
+
+foreign_all %>% 
+  write_tsv("../data/food_hazards_foreign_bodies.tsv")
+
+```
+
+
+

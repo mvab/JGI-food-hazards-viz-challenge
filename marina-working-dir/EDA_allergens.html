@@ -437,7 +437,7 @@ summary {
                                 ifelse(hazard_type %in% c(&quot;gluten&quot;, &quot;wheat&quot;, &quot;barley&quot;), &quot;gluten-related&quot;,hazard_type))))
             
 
-  
+write_tsv(allergens_all, &quot;../data/tidy/food_hazards_data_allergens_tidy.tsv&quot;)  
   
 allergens_all %&gt;%   count(hazard_type, sort=T)</code></pre>
 <pre><code>## # A tibble: 24 x 2
