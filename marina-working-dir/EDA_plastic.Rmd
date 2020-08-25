@@ -26,7 +26,7 @@ library(plotly)
 
 
 ```{r message=F}
-data_all<-read_tsv("../data/tidy/food_hazards_data_all.tsv")
+data_all<-read_csv("../data/tidy/food_hazards_data_all.csv")
 ```
 
 
@@ -253,9 +253,7 @@ dim(foreign_all)
 foreign_all %>% count(origin_country, sort=T)
 foreign_all %>% count(notified_country, sort=T)
 
-```
 
-```{r}
 foreign_all %>% count(alert_type, sort=T)
 foreign_all %>% count(product_categoty, sort=T)
 foreign_all %>% count(contaminant, sort=T)
@@ -265,7 +263,7 @@ foreign_all<-foreign_all %>%
 
 
 foreign_all %>% 
-  write_tsv("../data/food_hazards_foreign_bodies.tsv")
+  write_csv("../data/tidy/food_hazards_foreign_bodies.csv")
 
 ```
 

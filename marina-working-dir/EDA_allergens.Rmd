@@ -26,7 +26,7 @@ library(plotly)
 
 
 ```{r message=F}
-data_all<-read_tsv("../data/tidy/food_hazards_data_all.tsv")
+data_all<-read_csv("../data/tidy/food_hazards_data_all.csv")
 ```
 
 ```{r}
@@ -74,7 +74,7 @@ allergens_all <- allergens_all %>%
                                 ifelse(hazard_type %in% c("gluten", "wheat", "barley"), "gluten-related",hazard_type))))
             
 
-write_tsv(allergens_all, "../data/tidy/food_hazards_data_allergens_tidy.tsv")  
+write_csv(allergens_all, "../data/tidy/food_hazards_data_allergens_tidy.csv")  
   
 allergens_all %>%   count(hazard_type, sort=T)
 
