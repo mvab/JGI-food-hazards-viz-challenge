@@ -84,10 +84,15 @@ data <- data %>%
                                        ifelse(date_published_month %in% c("04", "05", "06"), "Q2",
                                        ifelse(date_published_month %in% c("07", "08", "09"), "Q3",
                                        ifelse(date_published_month %in% c("10", "11", "12"), "Q4", NA)))),
-               date_published_year_quarter = paste0(date_published_year, "-", date_published_quarter) ) %>% 
+               date_published_year_quarter = paste0(date_published_year, "-", date_published_quarter),
+               date_published_fulltime = paste0(date_published, " 00:00:00 +00:00")) %>% 
         # create incident ID
         separate(ID, into= c("ID", "ID_incident"), sep= "-", remove=F) %>% 
         mutate(ID_incident = ifelse(is.na(ID_incident), ID, ID_incident))
+
+
+# 2015-01-15 19:05:39 +00:00
+
 
 data %>% count(date_added_year)
 data %>% count(date_published_year)
@@ -367,7 +372,7 @@ test <- add_coordinates(data)
 data %>% 
   select(-link, -brand, -manufacturer,  -organisation, -date_added, -date_added_year) %>% 
   add_coordinates() %>% 
-  write_tsv("../data/tidy/food_hazards_data_all.tsv")
+  write_csv("../data/tidy/food_hazards_data_all.csv")
 ```
 
 
@@ -377,7 +382,7 @@ library(sp)
 library(maptools)
 data(wrld_simpl) # load data 
 
-data_all<-read_tsv("../data/tidy/food_hazards_data_all.tsv")
+data_all<-read_csv("../data/tidy/food_hazards_data_all.csv")
 
 
 # update names in data to match source of coordiantes
@@ -409,6 +414,7 @@ input<- data_all %>%
                                             notified_country =="Myanmar" ~ "Burma",
                                             TRUE ~ notified_country))
                                             
+
 
 get_random_cooor_single <- function(country_name){
   
@@ -488,7 +494,6 @@ coords_rand <- full_join(origin_coords, notified_coords, by="ID") %>%
 data_all_upd <- full_join(data_all, coords_rand, by ="ID")
 
 write_csv(data_all_upd, "../data/tidy/food_hazards_data_all.csv")
-write_tsv(data_all_upd, "../data/tidy/food_hazards_data_all.tsv")
 
 
 ```
