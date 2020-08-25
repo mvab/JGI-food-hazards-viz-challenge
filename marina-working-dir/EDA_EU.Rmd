@@ -1,0 +1,342 @@
+---
+title: "EU/non-EU"
+author: "Marina Vabistsevits"
+date: "12/08/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, fig.width = 12, fig.height = 8, warning = F, message = F)
+
+library(readr)
+library(dplyr)
+library(tidyr)
+
+library(stringr)
+library(lubridate)
+
+library(visdat)
+library(ggplot2)
+library(hrbrthemes)
+library(cowplot)
+
+library(plotly)
+
+```
+
+
+```{r message=F}
+data_all<-read_csv("../data/tidy/food_hazards_data_all.csv")
+```
+
+
+## Exploring and tidying EU columns
+
+```{r , include=F}
+# because I saved the updates to the same file as the input files, this part show the correct things right away
+
+data_all %>% count(origin_country_EU)
+data_all %>% count(notified_country_EU)
+```
+```{r include=F}
+data_all %>% filter(origin_country_EU == "EU") %>% pull(origin_country) %>% unique() %>% sort()
+```
+```{r, include=F}
+data_all %>% filter(origin_country_EU != "EU") %>% pull(origin_country) %>% unique() %>% sort()
+# this is wrong
+```
+
+```{r}
+# this is the real EU list
+european_union<-c("Austria", "Andorra", "Belgium", "Bulgaria", "Croatia", "Cyprus", "Czech Republic", "Denmark", "Estonia", "Finland", "France", "Germany", "Greece", "Hungary", "Ireland", "Italy", "Latvia", "Lithuania", "Luxembourg", "Malta", "Netherlands", "Poland", "Portugal", "Romania", "Slovakia", "Slovenia", "Spain", "Sweden")
+
+##europe_not_eu <-c("Norway", "Switzerland", "Iceland", "Belarus", "Ukraine", "Serbia", "Albania",  "Kosovo" , "Montenegro"  )
+#setdiff(european_union, data_all$origin_country)
+
+```
+
+```{r }
+# correct EU columns with true EU/non-EU
+data_corrected<-data_all %>% 
+  mutate(origin_country_EU= ifelse(origin_country %in% european_union, "EU", "non_EU")) %>% 
+  mutate(notified_country_EU= ifelse(notified_country %in% european_union, "EU", "non_EU")) 
+
+data_corrected<-data_corrected %>% 
+  mutate(origin_country_EU= ifelse(origin_country == "United Kingdom", "UK", origin_country_EU)) %>% 
+  mutate(notified_country_EU= ifelse(notified_country == "United Kingdom", "UK", notified_country_EU))
+```
+
+
+
+```{r}
+data_corrected %>% count(origin_country_EU)
+data_corrected %>% count(notified_country_EU)
+```
+
+```{r}
+data_corrected %>% filter(origin_country_EU == "EU") %>% pull(origin_country) %>% unique() %>% sort()
+data_corrected %>% filter(notified_country_EU == "EU") %>% pull(notified_country) %>% unique() %>% sort()
+```
+
+```{r}
+data_corrected %>% filter(origin_country_EU != "EU") %>% pull(origin_country) %>% unique() %>% sort()
+data_corrected %>% filter(notified_country_EU != "EU") %>% pull(notified_country) %>% unique() %>% sort()
+```
+
+```{r}
+# reports per country from EU countries
+data_corrected %>% filter(origin_country_EU == "EU") %>% count(origin_country, sort = T)
+```
+
+```{r}
+# reports per country from non-EU countries
+data_corrected %>% filter(origin_country_EU != "EU") %>% count(origin_country, sort = T)
+```
+
+
+### reports sources
+```{r}
+ggplot(data_corrected, aes(x = data_source, fill = alert_type)) + 
+  geom_bar()+
+  theme_minimal_hgrid(10, rel_small = 1)+
+  coord_flip()+
+  labs(fill = "title", y="") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+
+### RASFF - Food and Feed Safety Alerts
+
+The EU has one of the highest food safety standards in the world – largely thanks to the solid set of EU legislation in place, which ensures that food is safe for consumers. A key tool to ensure the flow of information to enabling swift reaction when risks to public health are detected in the food chain is RASFF – the Rapid Alert System for Food and Feed.
+Created in 1979, RASFF enables information to be shared efficiently between its members (EU Member State national food safety authorities, Commission, EFSA, ESA, Norway, Liechtenstein, Iceland and Switzerland) and provides a round-the-clock service to ensure that urgent notifications are sent, received and responded to collectively and efficiently. Thanks to RASFF, many food safety risks had been averted before they could have been harmful to European consumers.
+Vital information exchanged through RASFF can lead to products being recalled from the market. A robust system, which has matured over the years, RASFF continues to show its value to ensure food safety in the EU and beyond.
+
+https://ec.europa.eu/food/safety/rasff_en
+
+https://ec.europa.eu/food/sites/food/files/safety/docs/rasff_annual_report_2018.pdf
+
+https://ec.europa.eu/food/sites/food/files/safety/docs/rasff_annual_report_2018_infograph.pdf
+
+In 2018, 42% of RASFF notifications concerned controls at the outer EEA borders(6 ) at points of entry or border posts. When the consignment was not accepted for import (“border control – consignment detained”) a border rejection notification was made. In some cases, a sample was taken for analysis at the border yet the consignment was not held there but was forwarded to its destination under customs’ seals (“border control – consignment under customs”). This means that it should remain stored there until the result of the analysis is available. 
+
+https://ec.europa.eu/food/sites/food/files/safety/docs/rasff_country-fact-sheet_2018_gbr.pdf
+
+
+
+
+
+
+```{r}
+# split the data source names into "name" and "country"
+# RAFSS country will be "EU"
+
+data_corrected %>% count(data_source, sort=T)
+
+data_corrected <- data_corrected %>% 
+  extract(data_source, into = c("data_source_name", "data_source_country"), "([^(]+)\\s+\\((.*).", remove =F) %>%
+  mutate(data_source_country = ifelse(grepl("Hong Kong", data_source), "Hong Kong", data_source_country),
+         data_source_name = ifelse(grepl("Hong Kong", data_source), data_source, data_source_name)) %>% 
+  mutate(data_source_country = ifelse(grepl("Australia", data_source), "Australia", data_source_country),
+         data_source_name = ifelse(grepl("Australia", data_source), data_source, data_source_name)) %>% 
+  mutate(data_source_country = ifelse(grepl("RASFF", data_source), "EU", data_source_country),
+         data_source_name = ifelse(grepl("RASFF", data_source), data_source, data_source_name)) %>% 
+  mutate(data_source_country = ifelse(data_source_country == "US", "USA", data_source_country))
+
+
+# alerts by country and source name
+data_corrected %>% count(data_source_country, sort=T)
+data_corrected %>% count(data_source_name, sort=T)
+```
+
+```{r}
+data_corrected %>% write_csv("../data/tidy/food_hazards_data_all.csv")
+```
+
+
+```{r}
+ggplot(data_corrected, aes(x = data_source_country,  fill = notified_country_EU)) + 
+  geom_bar()+
+  theme_minimal_hgrid(14, rel_small = 1)+
+  coord_flip()+
+  labs(fill = "Notified country region", x="Data source country (i.e. notified by)") +
+  theme(legend.position = "top" )
+```
+
+```{r}
+ggplot(data_corrected, aes(x = data_source_country,  fill = origin_country_EU)) + 
+  geom_bar()+
+  theme_minimal_hgrid(14, rel_small = 1)+
+  coord_flip()+
+  labs(fill = "Origin country region", x="Data source country (i.e. notified by)") +
+  theme(legend.position = "top" )
+```
+
+```{r}
+# EU countries reported most hazards in:
+data_corrected %>% filter(data_source_country == "EU") %>% count(origin_country, sort=T)
+```
+
+```{r}
+# UK reported most hazards in:
+data_corrected %>% filter(data_source_country == "UK") %>% count(origin_country, sort=T)
+```
+
+
+## UK may lose accees to RAFSS alerts after Brexit
+
+The current food safety regulatory regime relies on a number of systems administered at present at an EU level. The FSA has recognised that some plans have sufficiently long lead times that the FSA needs to begin now for them to remain viable, even though we hope not to need all these provisions in a deal with the EU. Many of the plans have been carefully developed to provide the flexibility to respond to a wide range of negotiated outcomes. The FSA is working to ensure that, to the extent that our plans rely on alternative provision, the cost and necessary lead-in is allowed for.
+
+
+https://www.foodsafetynews.com/2019/03/food-safety-issues-up-in-the-air-as-u-k-approaches-brexit-u-s-food-targeted/
+
+
+The United Kingdom will lose access to RASFF after Brexit and Britain’s future relationship with EFSA remains unclear, according to the British public health minister. Britain’s future trade with U.S. food companies is also a question mark, with some in the U.K. saying certain food safety practices in the United States are unacceptable.
+Questioned by the British Parliament’s Energy and Environment Committee this week, Minister Steve Brine, MP, confirmed the U.K. would not be able to vote in the Standing Committee on Plants, Animals, Food and Feed or have access to the Rapid Alert System for Food and Feed (RASFF) after the U.K.’s exit from the European Union later this month. The planned departure is also known as Brexit.
+Brine admitted it is not known what the U.K.’s relationship with the European Food Safety Authority (EFSA) will be, and whether Britain will retain access to food safety risk assessment work.
+
+
+https://www.foodnavigator.com/Article/2018/05/31/UK-must-have-access-to-RASFF-and-TRACES-after-leaving-EU-LGA
+
+
+https://www.foodsafetynews.com/2020/01/coming-in-2020-europe-and-asia/
+
+_Food safety, trade deals and Brexit_
+The United Kingdom is still scheduled to leave the European Union following results of a referendum in 2016 and despite delays in 2019 this is almost certain to happen in early 2020.
+The U.K. and Europe have an agreement in place until the end of this year to keep things as they are now. The plan is to strike a trade deal between the two parties by the end of 2020. British Prime Minister Boris Johnson has said this transition period will not be extended.
+The government has repeated many times that food safety and standards will not be compromised but that has not made the concerns go away. International trade negotiations with the U.S., Australia, New Zealand and Japan are on the table.
+The issue was emphasized in a New Year’s message from National Farmers Union president, Minette Batters. She said the country cannot allow food imports such as chlorinated chicken and hormone-fed beef that are produced in ways illegal in the U.K., onto the U.K.’s supermarket shelves.
+
+
+http://brexitdb.com/db?tag=1341&sort=created&order=desc
+
+
+https://inews.co.uk/news/brexit/eu-regulations-poll-best-for-britain-environment-food-jobs-402115
+
+
+https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(19)30540-9/fulltext
+
+
+```{r}
+# RAFSS reported hazards per region
+data_corrected %>% filter(data_source_name == "RASFF Portal") %>% 
+                   count(notified_country_EU)
+```
+```{r}
+# EU countries notify about hazards by own sources (not RAFSS)
+data_corrected %>% filter(data_source_name != "RASFF Portal") %>% 
+                   count(notified_country_EU)
+```
+```{r}
+# UK -own food hazard sources
+# NB only in recent years
+data_corrected %>% filter(data_source_name != "RASFF Portal") %>% 
+                   filter(notified_country_EU == "UK") %>% 
+                   count(data_source, date_published_year, sort=T) %>% 
+                   arrange(data_source)
+```
+```{r}
+# UK-own data sources mostly report internal product recalls
+
+# FSA itself
+data_corrected %>% filter(data_source_name != "RASFF Portal") %>% 
+                   filter(notified_country_EU == "UK") %>% 
+                   filter(data_source == "FSA Alerts & Recalls (UK)") %>% 
+                   count(origin_country, alert_type, sort=T)
+```
+```{r}
+# Trading Standards (UK)
+data_corrected %>% filter(data_source_name != "RASFF Portal") %>% 
+                   filter(notified_country_EU == "UK") %>% 
+                   filter(data_source == "Trading Standards (UK)") %>% 
+                   count(origin_country, alert_type, sort=T)
+```
+```{r}
+# UK notifications within RAFSS include a variety of things outside the UK
+
+# notified by the UK; grouped by alert type +  by country of origin
+data_corrected %>% filter(data_source_name == "RASFF Portal") %>% 
+                   filter(notified_country_EU == "UK") %>% 
+                   count(origin_country, alert_type, sort=T)
+#notified by the UK; just by country of origin
+data_corrected %>% filter(data_source_name == "RASFF Portal") %>% 
+                   filter(notified_country_EU == "UK") %>% 
+                   count(origin_country, sort=T)
+
+```
+```{r}
+# UK seems to be a big entry point point for non-EU products/hazards into EU
+data_corrected %>% filter(data_source_name == "RASFF Portal") %>% 
+                   filter(notified_country_EU == "UK") %>% 
+                   count(origin_country_EU, sort=T)
+
+```
+
+```{r}
+# these countries with RAFSS notify about hazards from UK
+data_corrected %>% filter(data_source_name == "RASFF Portal") %>% 
+                   filter(origin_country_EU == "UK") %>% 
+                   count(notified_country, sort=T)
+
+```
+
+```{r}
+# these organisations (not RAFSS) report hazards from the UK
+data_corrected %>% filter(data_source_name != "RASFF Portal") %>% 
+                   filter(origin_country_EU == "UK") %>% 
+                   count(data_source, sort=T)
+
+```
+
+
+
+
+## Let's see what it's like for Norway
+
+
+```{r}
+data_corrected %>% filter(notified_country == "Norway") %>% 
+                   count(data_source_country, sort=T)
+
+```
+
+```{r}
+data_corrected %>% filter(notified_country == "Norway") %>% 
+                   filter(data_source_country== "Norway") %>% 
+                   count(origin_country, sort=T)
+
+```
+
+```{r}
+data_corrected %>% filter(notified_country == "Norway") %>% 
+                   filter(data_source_country== "EU") %>% 
+                   count(origin_country, sort=T)
+
+```
+
+
+
+## Let's see what it's like for Switzerland
+
+
+```{r}
+data_corrected %>% filter(notified_country == "Switzerland") %>% 
+                   count(data_source_country, sort=T)
+
+```
+
+```{r}
+data_corrected %>% filter(notified_country == "Switzerland") %>% 
+                   filter(data_source_country== "Switzerland") %>% 
+                   count(origin_country, sort=T)
+
+```
+
+```{r}
+data_corrected %>% filter(notified_country == "Switzerland") %>% 
+                   filter(data_source_country== "EU") %>% 
+                   count(origin_country, sort=T)
+
+```
+
+
+
