@@ -99,6 +99,26 @@ data %>% count(date_published_year)
 ```
 
 
+```{r}
+# update alert types into more general categories, aso some of them are "translation-guided" but mean the same thing
+
+data %>% 
+  count(alert_type,sort=T)
+
+data %>% 
+  count(alert_type, data_source, sort=T)
+
+data %>% filter(alert_type=="alert") %>% View
+
+data<-data %>% 
+  mutate(alert_type_large = ifelse(alert_type == "lookout", "alert", # italy-specific
+                      ifelse(alert_type =="warning", "alert", # belgium-specific
+                      ifelse(alert_type =="information", "alert", # norway specific
+                      ifelse(alert_type =="outbreak", "alert", # USA specific
+                      ifelse(alert_type =="information for follow-up", "update", # RAFSS term fro update
+                         alert_type))))))
+
+```
 
 
 ```{r}
@@ -114,16 +134,7 @@ data %>% count(hazard_group) %>% arrange(-n)
 data %>% count(origin_country) %>% arrange(-n)
 ```
 
-```{r fig.width=15, fig.height=10}
-ggplot(data, aes(x = data_source, fill = alert_type)) + 
-  geom_bar()+
-  theme_minimal_hgrid(10, rel_small = 1)+
-  #facet_grid(~alert_type)+
-  #scale_fill_manual(values=pal)+
-  coord_flip()+
-  labs(fill = "title", y="") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
-```
+
 
 
 ```{r}
