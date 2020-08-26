@@ -104,6 +104,16 @@ ggplot(data_corrected, aes(x = data_source, fill = alert_type)) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
+### reports sources
+```{r}
+ggplot(data_corrected, aes(x = data_source, fill = alert_type_large)) + 
+  geom_bar()+
+  theme_minimal_hgrid(10, rel_small = 1)+
+  coord_flip()+
+  labs(fill = "title", y="") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
 
 ### RASFF - Food and Feed Safety Alerts
 
@@ -140,7 +150,9 @@ data_corrected <- data_corrected %>%
          data_source_name = ifelse(grepl("Australia", data_source), data_source, data_source_name)) %>% 
   mutate(data_source_country = ifelse(grepl("RASFF", data_source), "EU", data_source_country),
          data_source_name = ifelse(grepl("RASFF", data_source), data_source, data_source_name)) %>% 
-  mutate(data_source_country = ifelse(data_source_country == "US", "USA", data_source_country))
+  mutate(data_source_country = ifelse(data_source_country == "US", "USA", data_source_country)) %>% 
+  mutate(data_source_country = ifelse(grepl("FoodSafetyNews.com", data_source), "USA", data_source_country),
+         data_source_name = ifelse(grepl("FoodSafetyNews.com", data_source), data_source, data_source_name)) 
 
 
 # alerts by country and source name
@@ -335,6 +347,16 @@ data_corrected %>% filter(notified_country == "Switzerland") %>%
 data_corrected %>% filter(notified_country == "Switzerland") %>% 
                    filter(data_source_country== "EU") %>% 
                    count(origin_country, sort=T)
+
+```
+
+
+
+Something else
+
+
+
+```{r}
 
 ```
 

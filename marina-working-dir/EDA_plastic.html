@@ -370,7 +370,7 @@ summary {
 </div>
 
 
-<pre class="r"><code>data_all&lt;-read_tsv(&quot;../data/tidy/food_hazards_data_all.tsv&quot;)</code></pre>
+<pre class="r"><code>data_all&lt;-read_csv(&quot;../data/tidy/food_hazards_data_all.csv&quot;)</code></pre>
 <div id="foreign-bodies---e.g.exploring-plastic-pollution" class="section level1">
 <h1>Foreign bodies - e.g. exploring plastic pollution</h1>
 <pre class="r"><code>foreign &lt;- data_all %&gt;% 
@@ -565,7 +565,7 @@ pc10 &lt;-ggplot(data = dat9, aes(x = date_published_year_quarter  , y = count, 
   theme(axis.text.x = element_text(angle = 45, hjust = 1))</code></pre>
 <pre class="r"><code>foreign_all&lt;-bind_rows(foreign, foreign_extra) 
 dim(foreign_all)</code></pre>
-<pre><code>## [1] 1845   31</code></pre>
+<pre><code>## [1] 1845   35</code></pre>
 <pre class="r"><code>foreign_all %&gt;% count(origin_country, sort=T)</code></pre>
 <pre><code>## # A tibble: 73 x 2
 ##    origin_country               n
@@ -644,7 +644,7 @@ dim(foreign_all)</code></pre>
 
 
 foreign_all %&gt;% 
-  write_tsv(&quot;../data/food_hazards_foreign_bodies.tsv&quot;)</code></pre>
+  write_csv(&quot;../data/tidy/food_hazards_foreign_bodies.csv&quot;)</code></pre>
 </div>
 
 
