@@ -108,7 +108,7 @@ data %>%
 data %>% 
   count(alert_type, data_source, sort=T)
 
-data %>% filter(alert_type=="alert") %>% View
+
 
 data<-data %>% 
   mutate(alert_type_large = ifelse(alert_type == "lookout", "alert", # italy-specific
@@ -352,7 +352,9 @@ add_coordinates <- function(input){
                                             notified_country =="Bosnia Herzegovina" ~ "Bosnia and Herzegovina",
                                             notified_country =="Tanzania" ~ "United Republic of Tanzania",
                                             TRUE ~ notified_country))  %>% 
-    filter(!origin_country %in% c("Palestinian Territories", "INFOSAN" , "Commission Services", NA) | !notified_country %in% c("Palestinian Territories", "INFOSAN" , "Commission Services", NA))
+    mutate(notified_country = ifelse(data_source == "FoodSafetyNews.com", "United States of America", notified_country)) %>% 
+    filter(!origin_country %in% c("Palestinian Territories", "INFOSAN" , "Commission Services") ,
+           !notified_country %in% c("Palestinian Territories", "INFOSAN" , "Commission Services"))
   
   
   # join with coords data
@@ -362,7 +364,7 @@ add_coordinates <- function(input){
            "long.origin" = "long") %>%
     left_join(., geo_df, by = c("notified_country" = "country")) %>% 
     rename("lat.notified" = "lat",
-           "long.notified" = "long") %>% drop_na()
+           "long.notified" = "long") 
   
   return(output)
 }
@@ -381,7 +383,7 @@ test <- add_coordinates(data)
 ## save all with coords
 ```{r}
 data %>% 
-  select(-link, -brand, -manufacturer,  -organisation, -date_added, -date_added_year) %>% 
+  select(-link, -brand, -manufacturer,  -organisation, -date_added, -date_added_year) %>%
   add_coordinates() %>% 
   write_csv("../data/tidy/food_hazards_data_all.csv")
 ```
@@ -410,6 +412,10 @@ input<- data_all %>%
                                             origin_country =="Brunei" ~ "Brunei Darussalam",
                                             origin_country =="Kosovo" ~ "Serbia",
                                             origin_country =="Myanmar" ~ "Burma",
+                                            origin_country == "Macedonia"~"The former Yugoslav Republic of Macedonia",
+                                            origin_country == "Guinea Bissau" ~"Guinea-Bissau",
+                                            origin_country == "Falkland Islands" ~  "Falkland Islands (Malvinas)",
+                                            origin_country =="Ivory Coast"~"Cote d'Ivoire",
                                             TRUE ~ origin_country)) %>% 
      mutate( notified_country = case_when(notified_country ==  "United States of America" ~ "United States",
                                             notified_country == "Hong Kong S.A.R." ~ "Hong Kong",
@@ -423,12 +429,17 @@ input<- data_all %>%
                                             notified_country =="Brunei" ~ "Brunei Darussalam",
                                             notified_country =="Kosovo" ~ "Serbia",
                                             notified_country =="Myanmar" ~ "Burma",
+                                            notified_country == "Macedonia"~"The former Yugoslav Republic of Macedonia",
+                                            notified_country == "Guinea Bissau" ~"Guinea-Bissau",
+                                            notified_country == "Falkland Islands" ~  "Falkland Islands (Malvinas)",
+                                            notified_country =="Ivory Coast"~"Cote d'Ivoire",
+
                                             TRUE ~ notified_country))
                                             
 
 
 get_random_cooor_single <- function(country_name){
-  
+  ## NOT USED FUNCTION ##
   if (!country_name %in% wrld_simpl$NAME){
     stop(paste0("Polygon not available for ", country_name))
   }
@@ -446,22 +457,53 @@ get_random_cooor_single <- function(country_name){
 
 get_random_cooor <- function(country_name, n){
   
-  if (!country_name %in% wrld_simpl$NAME){
+  if ( country_name == "NA" ){
+    rpoints<-as.data.frame(matrix(NA, ncol=2, nrow=n, dimnames =  list(NULL,c("long", "lat"))))
+    print("all coordinates will be NA")
+
+  } else if (!country_name %in% wrld_simpl$NAME) {
     stop(paste0("Polygon not available for ", country_name))
+    
+  } else{
+    
+    # get country polygon
+    sw <- slot(wrld_simpl[wrld_simpl$NAME == country_name,], "polygons")[[1]]
+    # sample a random coord (n) within that polygon
+    rpoints <- sp::spsample(sw, n = n, type = "random") %>% as.data.frame() # long-lat
+    
+    if (dim(rpoints)[1] == 0) {
+      # something is wrong with this polygon, so need to do it in parts, by n=180
+      rpoints <- overcome_sampling_problem(n,sw)
+    }
+    
+    colnames(rpoints) <- c("long", "lat")
   }
-  
-  # get country polygon
-  sw <- slot(wrld_simpl[wrld_simpl$NAME == country_name,], "polygons")[[1]]
-  # sample a random coord (n) within that polygon
-  rpoints <- sp::spsample(sw, n = n, type = "random") %>% as.data.frame() # long-lat
-  colnames(rpoints) <- c("long", "lat")
-  
-  return(rpoints)
+   return(rpoints)
 }
+
+
+overcome_sampling_problem<-function(n,sw ){
+  times=ceiling(n/150)
+  rpoints_collect=data.frame()
+  while (times != 0){
+      rpoints_tmp <- sp::spsample(sw, n = 180, type = "random") %>% as.data.frame() # long-lat
+      rpoints_collect<-rbind(rpoints_collect, rpoints_tmp)
+      times=times-1
+  }
+  rpoints_collect<-rpoints_collect[1:n,]
+  
+  if (dim(rpoints_collect)[1] == n){
+      return(rpoints_collect)
+  } else{
+    stop("sampling problem still exists")
+  }
+
+}
+
 
 ## Create random coords for Origin countries
 
-subset_origin <-input %>% select(ID, origin_country)
+subset_origin <-input %>% select(ID, origin_country) %>% mutate(origin_country=ifelse(is.na(origin_country), "NA", origin_country))
 origin_coords <- data.frame()
 
 for (country in unique(subset_origin$origin_country) ){
@@ -471,15 +513,16 @@ for (country in unique(subset_origin$origin_country) ){
   tmp<-get_random_cooor(country, n = dim(country_subset)[1])
   # addign them to case IDs (order does not matter)
   tmp2<-cbind(country_subset, tmp)
-  
+
   # merge into df that will hold all coords for origin data points
-  origin_coords <- rbind(origin_coords, tmp2)
+  origin_coords <- rbind(origin_coords, tmp2) %>% 
+    mutate(origin_country=ifelse(origin_country== "NA", NA,  origin_country))
 }
 colnames(origin_coords)[3:4] <- c('long.origin.rand', 'lat.origin.rand')
 
 ## Create random coords for Notified countries
 
-subset_notified <-input %>% select(ID, notified_country)
+subset_notified <-input %>% select(ID, notified_country)  %>% mutate(notified_country=ifelse(is.na(notified_country), "NA", notified_country))
 notified_coords <- data.frame()
 
 for (country in unique(subset_notified$notified_country) ){
@@ -491,7 +534,9 @@ for (country in unique(subset_notified$notified_country) ){
   tmp2<-cbind(country_subset, tmp)
   
   # merge into df that will hold all coords for notified data points
-  notified_coords <- rbind(notified_coords, tmp2)
+  notified_coords <- rbind(notified_coords, tmp2) %>% 
+        mutate(notified_country=ifelse(notified_country== "NA", NA,  notified_country))
+
 }
 colnames(notified_coords)[3:4] <- c('long.notified.rand', 'lat.notified.rand')
 
