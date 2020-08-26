@@ -38,9 +38,11 @@ data_all<-read_csv("../data/tidy/food_hazards_data_all.csv")
 data_all %>% count(origin_country_EU)
 data_all %>% count(notified_country_EU)
 ```
+
 ```{r include=F}
 data_all %>% filter(origin_country_EU == "EU") %>% pull(origin_country) %>% unique() %>% sort()
 ```
+
 ```{r, include=F}
 data_all %>% filter(origin_country_EU != "EU") %>% pull(origin_country) %>% unique() %>% sort()
 # this is wrong
