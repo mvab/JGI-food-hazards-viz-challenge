@@ -6,11 +6,11 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 
 <img src="content/notifications_about_UK_all.png" width="1000">  
 
-[View interactive version of the map](http://mvab.github.io/JGI-food-hazards-viz-challenge/docs/content/kepler_notifications_about_UK_all.html)
+[View interactive version of the map](http://mvab.github.io/JGI-food-hazards-viz-challenge/content/kepler_notifications_about_UK_all.html)
 
 
 <img src="content/notifications_about_UK_by_UK.png" width="1000">  
 
-[View interactive version of the map](http://mvab.github.io/JGI-food-hazards-viz-challenge/docs/content/kepler_notifications_about_UK_by_UK.html)
+[View interactive version of the map](http://mvab.github.io/JGI-food-hazards-viz-challenge/content/kepler_notifications_about_UK_by_UK.html)
 
 
