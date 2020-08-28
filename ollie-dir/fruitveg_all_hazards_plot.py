@@ -6,6 +6,7 @@ import numpy as np
 food_haz = pd.read_csv('data/tidy/food_hazards_data_all.csv')
 fruitveg = food_haz.loc[food_haz.product_categoty == 'fruits and vegetables']
 fruitveg = fruitveg[fruitveg.origin_country_EU != 'UK']
+fruitveg = fruitveg[pd.notna(fruitveg.origin_country_EU)]
 
 eu_count = sum(['non' not in x for x in fruitveg.origin_country_EU])
 non_eu_count = len(fruitveg) - eu_count
@@ -19,10 +20,16 @@ for tup, df in fruitveg.groupby(['origin_country_EU', 'hazard_group']):
     row.append(freq)
     counts.loc[len(counts)] = row
 
-plt.figure(figsize=(10, 8))
-sns.barplot('freq', 'hazard', hue='origin', data=counts.sort_values('freq', ascending=False))
-plt.tight_layout()
-
+to_merge = {
+    10: 11,
+    3: 25,
+    32: 53
+}
+for i, row in counts.iterrows():
+    if i in to_merge.keys():
+        counts['count'][to_merge[i]] += row['count']
+        counts['freq'][to_merge[i]] += row['freq']
+        counts.drop(index=[i], inplace=True)
 diff_df = pd.DataFrame(columns=['hazard', 'freq_diff'])
 for haz, df in counts.groupby('hazard'):
     if len(df) == 1:
@@ -34,27 +41,17 @@ for haz, df in counts.groupby('hazard'):
         eu_freq = df.loc[df.origin == 'EU'].freq.iloc[0]
         non_eu_freq = df.loc[df.origin == 'non_EU'].freq.iloc[0]
         diff = non_eu_freq - eu_freq
-    row = [haz, diff]
+    if '(other)' in haz:
+        haz = haz[:-8]
+    row = [haz.capitalize(), diff]
     diff_df.loc[len(diff_df)] = row
 diff_df.sort_values('freq_diff', ascending=False, inplace=True)
 
-
-def colors_from_values(values, palette_name):
-    # normalize the values to range [0, 1]
-    normalized = (values - min(values)) / (max(values) - min(values))
-    # convert to indices
-    indices = np.round(normalized * (len(values) - 1)).astype(np.int32)
-    # use the indices to get the colors
-    palette = sns.color_palette(palette_name, len(values))
-    return np.array(palette).take(indices, axis=0)
-
-y = list(diff_df.freq_diff.values)
-y[-1]+=0.09
-y[0] -= 0.03
-y[1] -= 0.02
+plt.style.use("dark_background")
 plt.figure(figsize=(10, 8))
-sns.barplot('freq_diff', 'hazard', data=diff_df, palette=colors_from_values(y, 'cool'))
+sns.barplot('freq_diff', 'hazard', data=diff_df, palette='RdBu')
 plt.ylabel('')
-plt.xlabel('Relative frequency change')
-plt.title('Difference in relative frequency of hazard types\nwhen changing from EU to non-EU fuits and veg')
+plt.xlabel('Relative frequency change after switching to non-EU imports')
+plt.title('Hazard alerts for fruits and vegetables: EU vs non-EU imports')
 plt.tight_layout()
+plt.savefig('figures/all_hazards_eu_noneu.png')
