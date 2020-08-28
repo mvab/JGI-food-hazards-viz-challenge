@@ -28,3 +28,8 @@ Text about looking at allergens
 Text about looking at foreign bodies
 
 <img src="content/foreign_bodies_eu_noneu.png" width="600">  
+
+
+
+---
+_This work was undertaken as part of a data challenge organised by the Jean Golding Institute for Data-Intensive Research at the University of Bristol and the Food Standard Agency (FSA)_
