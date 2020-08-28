@@ -43,6 +43,10 @@ for haz, df in counts.groupby('hazard'):
         diff = non_eu_freq - eu_freq
     if '(other)' in haz:
         haz = haz[:-8]
+    if 'tse' not in haz.lower():
+        haz = haz.capitalize()
+    else:
+        haz = 'Prion diseases'
     row = [haz.capitalize(), diff]
     diff_df.loc[len(diff_df)] = row
 diff_df.sort_values('freq_diff', ascending=False, inplace=True)
