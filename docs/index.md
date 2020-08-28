@@ -14,8 +14,8 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 [View interactive version of the map](http://mvab.github.io/JGI-food-hazards-viz-challenge/content/kepler_notifications_about_UK_by_UK.html)
 
 
-<img src="content/all_hazards_eu_noneu.png">  
+<img src="content/all_hazards_eu_noneu.png" width="500">  
 
-<img src="content/allergens_eu_noneu.png">  
+<img src="content/allergens_eu_noneu.png" width="300">  
 
-<img src="content/foreign_bodies_eu_noneu.png">  
+<img src="content/foreign_bodies_eu_noneu.png" width="200">  
