@@ -134,7 +134,12 @@ In 2018, 42% of RASFF notifications concerned controls at the outer EEA borders(
 https://ec.europa.eu/food/sites/food/files/safety/docs/rasff_country-fact-sheet_2018_gbr.pdf
 
 
+RASFF accounts for 37% of all alerts in the provided dataset
 
+
+About UK/EU food trade:
+
+https://ec.europa.eu/info/food-farming-fisheries/farming/eu-agriculture-and-brexit_en
 
 
 
@@ -236,10 +241,31 @@ data_corrected %>% filter(data_source_name == "RASFF Portal") %>%
                    count(notified_country_EU)
 ```
 ```{r}
+# what are those non-EU countries?
+data_corrected %>% 
+  filter(data_source_name == "RASFF Portal") %>% 
+  filter(notified_country_EU =="non_EU") %>%
+  count(notified_country, sort=T)
+```
+
+
+```{r}
 # EU countries notify about hazards by own sources (not RAFSS)
 data_corrected %>% filter(data_source_name != "RASFF Portal") %>% 
                    count(notified_country_EU)
 ```
+
+```{r}
+#let's see notification from EU countries that came not from RAFSS
+data_corrected %>%
+  filter(data_source_name != "RASFF Portal") %>% 
+  filter(notified_country_EU == "EU") %>% 
+  count(notified_country, origin_country, sort=T)
+# th majority of them are internal 
+```
+
+
+
 ```{r}
 # UK -own food hazard sources
 # NB only in recent years
