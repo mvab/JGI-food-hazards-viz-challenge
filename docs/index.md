@@ -6,13 +6,12 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 ### Notifications by RAFSS about UK food imports
 <img src="content/notifications_about_UK_all.png" width="1000">  
 
-[View interactive version of the map](http://mvab.github.io/JGI-food-hazards-viz-challenge/content/kepler_notifications_about_UK_all.html)
 [View interactive version of the map](content/kepler_notifications_about_UK_all.html)
 
 ### Notifications by UK-internal alert systems about food imports
 <img src="content/notifications_about_UK_by_UK.png" width="1000">  
 
-[View interactive version of the map](http://mvab.github.io/JGI-food-hazards-viz-challenge/content/kepler_notifications_about_UK_by_UK.html)
+[View interactive version of the map](content/kepler_notifications_about_UK_by_UK.html)
 
 
 ### Closer look
