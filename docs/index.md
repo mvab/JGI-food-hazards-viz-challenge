@@ -4,14 +4,14 @@ Text about RAFSS/Brext/trade deals/new food sources for UK
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum
 
 ### Notifications by RAFSS about UK food imports
-<img src="content/notifications_about_UK_all.png" width="1000">  
+<img src="content/notifications_about_UK_all_v2.png" width="1000">  
 
-[View interactive version of the map](http://mvab.github.io/JGI-food-hazards-viz-challenge/content/kepler_notifications_about_UK_all.html)
+[View interactive version of the map](http://mvab.github.io/JGI-food-hazards-viz-challenge/content/kepler_notifications_about_UK_all_v2.html)
 
 ### Notifications by UK-internal alert systems about food imports
-<img src="content/notifications_about_UK_by_UK.png" width="1000">  
+<img src="content/notifications_about_UK_by_UK_v2.png" width="1000">  
 
-[View interactive version of the map](http://mvab.github.io/JGI-food-hazards-viz-challenge/content/kepler_notifications_about_UK_by_UK.html)
+[View interactive version of the map](http://mvab.github.io/JGI-food-hazards-viz-challenge/content/kepler_notifications_about_UK_by_UK_v2.html)
 
 
 ### Closer look
