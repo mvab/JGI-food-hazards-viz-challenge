@@ -5,18 +5,15 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 
 ### Notifications by RAFSS about UK food imports
 
-testing GIF2
+testing GIF3
 <img src="content/RAFSS_vs_UK_alerts.gif" width="1000">  
 
 
 <img src="content/notifications_about_UK_all.png" width="1000">  
 
-[View interactive version of the map](content/kepler_notifications_about_UK_all.html)
+**EU alerts:** [interactive version of the map](content/kepler_notifications_about_UK_all.html) | [static version of the map](content/kepler_notifications_about_UK_all.png)
 
-### Notifications by UK-internal alert systems about food imports
-<img src="content/notifications_about_UK_by_UK.png" width="1000">  
-
-[View interactive version of the map](content/kepler_notifications_about_UK_by_UK.html)
+**UK-internal alerts:** [interactive version of the map](content/kepler_notifications_about_UK_by_UK.html) | [static version of the map](content/kepler_notifications_about_UK_by_UK.png)
 
 
 ### Closer look
