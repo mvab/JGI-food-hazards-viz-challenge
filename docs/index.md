@@ -9,9 +9,9 @@ testing GIF3
 <img src="content/RAFSS_vs_UK_alerts.gif" width="1000">  
 
 
-**EU alerts:** [interactive version of the map](content/kepler_notifications_about_UK_all.html) | [static version of the map](content/kepler_notifications_about_UK_all.png)
+**EU alerts:** | [interactive version of the map](content/kepler_notifications_about_UK_all.html) | [static version of the map](content/notifications_about_UK_all.png)
 
-**UK-internal alerts:** [interactive version of the map](content/kepler_notifications_about_UK_by_UK.html) | [static version of the map](content/kepler_notifications_about_UK_by_UK.png)
+**UK-internal alerts:** | [interactive version of the map](content/kepler_notifications_about_UK_by_UK.html) | [static version of the map](content/notifications_about_UK_by_UK.png)
 
 
 ### Closer look
