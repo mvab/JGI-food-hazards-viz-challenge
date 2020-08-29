@@ -5,7 +5,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 
 ### Notifications by RAFSS about UK food imports
 
-testing GIF
+testing GIF2
 <img src="content/RAFSS_vs_UK_alerts.gif" width="1000">  
 
 
