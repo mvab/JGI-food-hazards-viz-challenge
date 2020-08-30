@@ -1,4 +1,3 @@
-## Too much tooty in the fruity: Keeping food safe in a post-Brexit Britain
 
 ### Background
 
@@ -52,6 +51,7 @@ In conclusion, the potential effects of Brexit on the UK’s food safety standar
 
 
 _*  need to explain how coordinates were generated (copy from the form later)_
+
 _** These plots were generated in a kind of all-or-nothing scenario which is unlikely to ever occur in real life. As a result, the absolute values plotted here should not be taken as gospel, but rather as a rough guide to the general changes in imported food hazards that we may observe in the coming years._
 
 
