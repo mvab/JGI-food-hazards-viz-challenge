@@ -70,7 +70,7 @@ allergens_all <- allergens_all %>%
                                                          "cashew", "pistachio", "macadamia nuts", 
                                                          "brazil nuts", "pine nuts",
                                                          "unnamed nuts", "peanut" ), "nuts",
-                               ifelse(hazard_type %in% c("milk", "lactose"), "milk-related",
+                               ifelse(hazard_type %in% c("milk", "lactose"), "dairy",
                                 ifelse(hazard_type %in% c("gluten", "wheat", "barley"), "gluten-related",hazard_type))))
             
 
