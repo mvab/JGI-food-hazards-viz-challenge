@@ -51,9 +51,12 @@ Insect contamination sees a large increase in relative frequency for fruit and v
 In conclusion, the potential effects of Brexit on the UK’s food safety standards are numerous and complex, and in this brief analysis, we have barely scratched the surface of the issue. Striking a deal to have continued access to RASFF data seems like it would be a positive action for the UK, but that would surely incur political ramifications that are beyond the scope of what is being considered here. Regardless, the FSA certainly has a very central role to play in keeping an independent Britain healthy, both in this transitional period and beyond.
 
 
-_*  need to explain how coordinates were generated (copy from the form later)
-** These plots were generated in a kind of all-or-nothing scenario which is unlikely to ever occur in real life. As a result, the absolute values plotted here should not be taken as gospel, but rather as a rough guide to the general changes in imported food hazards that we may observe in the coming years._
+_*  need to explain how coordinates were generated (copy from the form later)_
+_** These plots were generated in a kind of all-or-nothing scenario which is unlikely to ever occur in real life. As a result, the absolute values plotted here should not be taken as gospel, but rather as a rough guide to the general changes in imported food hazards that we may observe in the coming years._
 
 
 ---
-_This work was undertaken as part of a data challenge organised by the Jean Golding Institute for Data-Intensive Research at the University of Bristol and the Food Standard Agency (FSA)_
+_This work was undertaken as part of a [data challenge][1] organised by the Jean Golding Institute for Data-Intensive Research at the University of Bristol and the Food Standard Agency (FSA)_
+
+
+[1]: http://www.bristol.ac.uk/golding/get-involved/competitions/food-hazards-from-around-the-world-data-competition/
