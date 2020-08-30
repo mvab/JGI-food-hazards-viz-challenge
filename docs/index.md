@@ -15,8 +15,6 @@ We visualised where the food hazards identified in the UK come from. The lines s
 
 We show two views: 1) EU alert system notifications (RASFF) and 2) UK internal notifications (FSA and Trading Standards). If the UK loses access to RASFF and also has to negotiate trade deals with non-EU countries, the loss of food hazards information regarding our own imports will be tremendous, and the FSA would have to develop and extend their alert system (which currently appears to only focus on national-level hazards) to ensure food safety from internationally imported goods. 
 
-**EU alerts (RASFF) map:** [interactive](content/kepler_notifications_about_UK_all.html) | [static](content/notifications_about_UK_all.png)
-**UK-internal alerts map:** | [interactive](content/kepler_notifications_about_UK_by_UK.html) | [static](content/notifications_about_UK_by_UK.png)
 
 <img src="content/RAFSS_vs_UK_alerts.gif" width="1000">  
 
@@ -52,7 +50,7 @@ Insect contamination sees a large increase in relative frequency for fruit and v
 In conclusion, the potential effects of Brexit on the UK’s food safety standards are numerous and complex, and in this brief analysis, we have barely scratched the surface of the issue. Striking a deal to have continued access to RASFF data seems like it would be a positive action for the UK, but that would surely incur political ramifications that are beyond the scope of what is being considered here. Regardless, the FSA certainly has a very central role to play in keeping an independent Britain healthy, both in this transitional period and beyond.
 
 
-[^1]:  need to explain how coordinates were generated (copy from the form later)
+[^1]:  **need to explain how coordinates were generated (copy from the form later)**
 
 [^2]: These plots were generated in a kind of all-or-nothing scenario which is unlikely to ever occur in real life. As a result, the absolute values plotted here should not be taken as gospel, but rather as a rough guide to the general changes in imported food hazards that we may observe in the coming years.
 
@@ -60,6 +58,7 @@ In conclusion, the potential effects of Brexit on the UK’s food safety standar
 ---
 _This work was undertaken as part of a [data challenge][10] organised by the Jean Golding Institute for Data-Intensive Research at the University of Bristol and the Food Standard Agency (FSA)_
 
+---
 
 
 [1]: https://ec.europa.eu/food/safety/rasff_en
