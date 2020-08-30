@@ -3,9 +3,9 @@
 
 The United Kingdom is scheduled to leave the European Union at the end of 2020 following results of a referendum in 2016. Final exit deal details are still being negotiated in the currently ongoing transitional period, but it is inevitable that food trade and safety will be affected.
 
-The current food safety system in the UK relies on regulations administered at the EU level. The EU has one of the highest food safety standards in the world – largely thanks to the solid set of EU legislation in place, which ensures that food is safe for consumers. The main reporting system is RASFF (Rapid Alert System for Food and Feed) [2], which provides a round-the-clock service of sending, receiving and responding to food hazard alerts collectively and efficiently. The system is accessible to EU members and EEA countries, and the reporting is done on both EU internally traded goods and anything entering the EEA borders.
+The current food safety system in the UK relies on regulations administered at the EU level. The EU has one of the highest food safety standards in the world – largely thanks to the solid set of EU legislation in place, which ensures that food is safe for consumers. The main reporting system is RASFF (Rapid Alert System for Food and Feed) [1][1], which provides a round-the-clock service of sending, receiving and responding to food hazard alerts collectively and efficiently. The system is accessible to EU members and EEA countries, and the reporting is done on both EU internally traded goods and anything entering the EEA borders.
 
-The United Kingdom will lose access to RASFF data after Brexit in case of no-deal, as informed by Public Health Minister Steve Brine, MP in 2018 [3,4].  
+The United Kingdom will lose access to RASFF data after Brexit in case of no-deal, as informed by Public Health Minister Steve Brine, MP in 2018 [2,3][2,3].  
 
 In dataset provided for this challenge, around 40% of alerts come from RASFF. For the UK, RASFF provides the majority of alerts on imported food from Europe and the rest of the World. The UK’s internal systems, which include FSA (Food Standards Agency) and Trading Standards, provide the alerts mostly on food originated within the UK.
 
@@ -26,7 +26,7 @@ We show two views: 1) EU alert system notifications (RASFF) and 2) UK internal n
 
 ### Closer look at Fruit and Veg
 
-Systems will need to be put in place to make up for the loss of information from RASFF alerts. An increase on tariffs for EU-produced food after Brexit [5] will likely cause an uptick in importers buying from outside of the union, which would bring an accompanying shift to the makeup of food hazards that such systems will need to detect. The following graphics briefly explore how this shift might materialize for the UK’s biggest food import [6]: fruits and vegetables.
+Systems will need to be put in place to make up for the loss of information from RASFF alerts. An increase on tariffs for EU-produced food after Brexit [4][4] will likely cause an uptick in importers buying from outside of the union, which would bring an accompanying shift to the makeup of food hazards that such systems will need to detect. The following graphics briefly explore how this shift might materialize for the UK’s biggest food import [5][5]: fruits and vegetables.
 
 The plots below show the difference** between the occurrence rates of various food hazards in EU vs non-EU fruits and vegetables.
 
@@ -40,11 +40,11 @@ While reports of certain contaminants may indeed go down upon switching to non-E
 
 <img src="content/allergens_eu_noneu.png" width="600">  
 
-Fruits and vegetables from non-EU countries show higher levels of contamination with the most common food allergens (dairy, eggs, nuts). Due to the UK’s relatively high prevalence of food allergies [7], it is vital that UK internal systems can detect and report quickly upon any allergen contaminants in imported food, and be ready for shifts in relative threat levels that might be induced by importing from non-EU sources.
+Fruits and vegetables from non-EU countries show higher levels of contamination with the most common food allergens (dairy, eggs, nuts). Due to the UK’s relatively high prevalence of food allergies [6][6], it is vital that UK internal systems can detect and report quickly upon any allergen contaminants in imported food, and be ready for shifts in relative threat levels that might be induced by importing from non-EU sources.
 
 <img src="content/foreign_bodies_eu_noneu.png" width="600">  
 
-Insect contamination sees a large increase in relative frequency for fruit and vegetables imported from outside of the EU. There are many health-related issues associated with this type of contamination [8], such as the carrying of harmful micro-organisms, but there are also ecological concerns at play here. Invasive species can have quite devastating economic impacts [9], and given the already large level of economic uncertainty faced by the UK due to Brexit and Covid-19, we might do well to step up our diligence against such threats to our own agricultural systems.
+Insect contamination sees a large increase in relative frequency for fruit and vegetables imported from outside of the EU. There are many health-related issues associated with this type of contamination [7][7], such as the carrying of harmful micro-organisms, but there are also ecological concerns at play here. Invasive species can have quite devastating economic impacts [8][8], and given the already large level of economic uncertainty faced by the UK due to Brexit and Covid-19, we might do well to step up our diligence against such threats to our own agricultural systems.
 
 
 In conclusion, the potential effects of Brexit on the UK’s food safety standards are numerous and complex, and in this brief analysis, we have barely scratched the surface of the issue. Striking a deal to have continued access to RASFF data seems like it would be a positive action for the UK, but that would surely incur political ramifications that are beyond the scope of what is being considered here. Regardless, the FSA certainly has a very central role to play in keeping an independent Britain healthy, both in this transitional period and beyond.
@@ -56,7 +56,19 @@ _** These plots were generated in a kind of all-or-nothing scenario which is unl
 
 
 ---
-_This work was undertaken as part of a [data challenge][1] organised by the Jean Golding Institute for Data-Intensive Research at the University of Bristol and the Food Standard Agency (FSA)_
+_This work was undertaken as part of a [data challenge][10] organised by the Jean Golding Institute for Data-Intensive Research at the University of Bristol and the Food Standard Agency (FSA)_
 
 
-[1]: http://www.bristol.ac.uk/golding/get-involved/competitions/food-hazards-from-around-the-world-data-competition/
+
+[1]: https://ec.europa.eu/food/safety/rasff_en
+[2]: https://www.foodsafetynews.com/2019/03/food-safety-issues-up-in-the-air-as-u-k-approaches-brexit-u-s-food-targeted/
+[3]: https://www.parliament.uk/documents/lords-committees/eu-energy-environment-subcommittee/Correspondence/SBtoLT-RASFF-190319.pdf
+[4]: https://publications.parliament.uk/pa/ld201719/ldselect/ldeucom/129/12905.htm
+[5]: https://www.gov.uk/government/publications/food-statistics-pocketbook/food-statistics-in-your-pocket-global-and-uk-supply#uk-trade-in-different-food-groups-2019
+[6]: https://www.allergyuk.org/assets/000/001/369/Stats_for_Website_original.pdf?1505209830
+[7]: https://www.food.gov.uk/sites/default/files/media/document/Chapter6-Pest_control_0.pdf
+[8]: Dean R. Paini, Andy W. Sheppard, David C. Cook, Paul J. De Barro, Susan P. Worner, Matthew B. Thomas. ‘Global threat to agriculture from invasive species’. Proceedings of the National Academy of Sciences Jul 2016, 113 (27) 7575-7579; DOI: 10.1073/pnas.1602205113
+[10]: http://www.bristol.ac.uk/golding/get-involved/competitions/food-hazards-from-around-the-world-data-competition/
+ 
+
+
