@@ -68,7 +68,7 @@ _This work was undertaken as part of a [data challenge][10] organised by the Jea
 [5]: https://www.gov.uk/government/publications/food-statistics-pocketbook/food-statistics-in-your-pocket-global-and-uk-supply#uk-trade-in-different-food-groups-2019
 [6]: https://www.allergyuk.org/assets/000/001/369/Stats_for_Website_original.pdf?1505209830
 [7]: https://www.food.gov.uk/sites/default/files/media/document/Chapter6-Pest_control_0.pdf
-[8]: Dean R. Paini, Andy W. Sheppard, David C. Cook, Paul J. De Barro, Susan P. Worner, Matthew B. Thomas. ‘Global threat to agriculture from invasive species’. Proceedings of the National Academy of Sciences Jul 2016, 113 (27) 7575-7579; DOI: 10.1073/pnas.1602205113
+[8]: https://www.pnas.org/content/113/27/7575
 [10]: http://www.bristol.ac.uk/golding/get-involved/competitions/food-hazards-from-around-the-world-data-competition/
  
 
