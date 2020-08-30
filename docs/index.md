@@ -31,18 +31,18 @@ Systems will need to be put in place to make up for the loss of information from
 The plots below show the difference** between the occurrence rates of various food hazards in EU vs non-EU fruits and vegetables.
 
 
-<img src="content/all_hazards_eu_noneu.png" width="800">  
+<img src="content/all_hazards_eu_noneu.png" width="800" class="center">  
 
 Comparison of the hazard alert types reported on fruits and vegetables between EU and non-EU countries shows that non-EU produce has considerably higher levels of pesticides, microbial and pathogenic contaminants, and food additives and flavourings.  Interestingly, the inverse is observed for foreign bodies, packaging contamination, and allergens. 
 
 While reports of certain contaminants may indeed go down upon switching to non-EU food sources, this does not necessarily mean that the actual frequency of cases for these types of contaminations will go down as well. It is certainly plausible that the larger number of reports for EU-sourced food is an artefact of the more stringent guidelines that the EU has in place for sending out these alerts. As a result, it is prudent to examine these specific contaminant classes further so that we can be best prepared for the murkier threat that they might pose.
 
 
-<img src="content/allergens_eu_noneu.png" width="600">  
+<img src="content/allergens_eu_noneu.png" width="600" class="center">  
 
 Fruits and vegetables from non-EU countries show higher levels of contamination with the most common food allergens (dairy, eggs, nuts). Due to the UK’s relatively high prevalence of food allergies [6][6], it is vital that UK internal systems can detect and report quickly upon any allergen contaminants in imported food, and be ready for shifts in relative threat levels that might be induced by importing from non-EU sources.
 
-<img src="content/foreign_bodies_eu_noneu.png" width="600">  
+<img src="content/foreign_bodies_eu_noneu.png" width="600" class="center">  
 
 Insect contamination sees a large increase in relative frequency for fruit and vegetables imported from outside of the EU. There are many health-related issues associated with this type of contamination [7][7], such as the carrying of harmful micro-organisms, but there are also ecological concerns at play here. Invasive species can have quite devastating economic impacts [8][8], and given the already large level of economic uncertainty faced by the UK due to Brexit and Covid-19, we might do well to step up our diligence against such threats to our own agricultural systems.
 
