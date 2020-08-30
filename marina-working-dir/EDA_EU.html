@@ -546,6 +546,9 @@ data_corrected %&gt;% filter(origin_country_EU != &quot;EU&quot;) %&gt;% count(o
 <p><a href="https://ec.europa.eu/food/sites/food/files/safety/docs/rasff_annual_report_2018_infograph.pdf" class="uri">https://ec.europa.eu/food/sites/food/files/safety/docs/rasff_annual_report_2018_infograph.pdf</a></p>
 <p>In 2018, 42% of RASFF notifications concerned controls at the outer EEA borders(6 ) at points of entry or border posts. When the consignment was not accepted for import (“border control – consignment detained”) a border rejection notification was made. In some cases, a sample was taken for analysis at the border yet the consignment was not held there but was forwarded to its destination under customs’ seals (“border control – consignment under customs”). This means that it should remain stored there until the result of the analysis is available.</p>
 <p><a href="https://ec.europa.eu/food/sites/food/files/safety/docs/rasff_country-fact-sheet_2018_gbr.pdf" class="uri">https://ec.europa.eu/food/sites/food/files/safety/docs/rasff_country-fact-sheet_2018_gbr.pdf</a></p>
+<p>RASFF accounts for 37% of all alerts in the provided dataset</p>
+<p>About UK/EU food trade:</p>
+<p><a href="https://ec.europa.eu/info/food-farming-fisheries/farming/eu-agriculture-and-brexit_en" class="uri">https://ec.europa.eu/info/food-farming-fisheries/farming/eu-agriculture-and-brexit_en</a></p>
 <pre class="r"><code># split the data source names into &quot;name&quot; and &quot;country&quot;
 # RAFSS country will be &quot;EU&quot;
 
@@ -609,6 +612,20 @@ data_corrected %&gt;% count(data_source_country, sort=T)</code></pre>
 ## 10 AFSCA Recalls                            614
 ## # … with 30 more rows</code></pre>
 <pre class="r"><code>data_corrected %&gt;% write_csv(&quot;../data/tidy/food_hazards_data_all.csv&quot;)</code></pre>
+<pre class="r"><code># count how many per country
+
+data_tmp &lt;- read_csv(&quot;../data/tidy/food_hazards_data_all.csv&quot;) 
+
+count_per_origin&lt;-
+  data_tmp %&gt;% filter(notified_country_EU ==&quot;UK&quot;) %&gt;% 
+            count(origin_country, sort=T) %&gt;% 
+            rename('alerts_from_origin'='n')
+
+
+data_tmp&lt;- data_tmp %&gt;% 
+  filter(notified_country_EU ==&quot;UK&quot;) %&gt;% left_join(., count_per_origin, by = &quot;origin_country&quot;)
+
+data_tmp %&gt;% write_csv(&quot;../data/tidy/food_hazards_data_UK_notified_tmp.csv&quot;)</code></pre>
 <pre class="r"><code>ggplot(data_corrected, aes(x = data_source_country,  fill = notified_country_EU)) + 
   geom_bar()+
   theme_minimal_hgrid(14, rel_small = 1)+
@@ -678,6 +695,17 @@ data_corrected %&gt;% filter(data_source_name == &quot;RASFF Portal&quot;) %&gt;
 ## 1 EU                  10313
 ## 2 non_EU                331
 ## 3 UK                   1248</code></pre>
+<pre class="r"><code># what are those non-EU countries?
+data_corrected %&gt;% 
+  filter(data_source_name == &quot;RASFF Portal&quot;) %&gt;% 
+  filter(notified_country_EU ==&quot;non_EU&quot;) %&gt;%
+  count(notified_country, sort=T)</code></pre>
+<pre><code>## # A tibble: 3 x 2
+##   notified_country     n
+##   &lt;chr&gt;            &lt;int&gt;
+## 1 Norway             168
+## 2 Switzerland        158
+## 3 Iceland              5</code></pre>
 <pre class="r"><code># EU countries notify about hazards by own sources (not RAFSS)
 data_corrected %&gt;% filter(data_source_name != &quot;RASFF Portal&quot;) %&gt;% 
                    count(notified_country_EU)</code></pre>
@@ -687,11 +715,31 @@ data_corrected %&gt;% filter(data_source_name != &quot;RASFF Portal&quot;) %&gt;
 ## 1 EU                   4024
 ## 2 non_EU              14684
 ## 3 UK                   1504</code></pre>
+<pre class="r"><code>#let's see notification from EU countries that came not from RAFSS
+data_corrected %&gt;%
+  filter(data_source_name != &quot;RASFF Portal&quot;) %&gt;% 
+  filter(notified_country_EU == &quot;EU&quot;) %&gt;% 
+  count(notified_country, origin_country, sort=T)</code></pre>
+<pre><code>## # A tibble: 127 x 3
+##    notified_country origin_country     n
+##    &lt;chr&gt;            &lt;chr&gt;          &lt;int&gt;
+##  1 France           France           984
+##  2 Belgium          Belgium          592
+##  3 Italy            Italy            489
+##  4 Denmark          Denmark          340
+##  5 Netherlands      Netherlands      257
+##  6 Germany          Germany          214
+##  7 Luxembourg       Luxembourg       160
+##  8 Slovakia         Slovakia         153
+##  9 Hungary          Hungary          108
+## 10 Malta            Malta            102
+## # … with 117 more rows</code></pre>
+<pre class="r"><code># th majority of them are internal </code></pre>
 <pre class="r"><code># UK -own food hazard sources
 # NB only in recent years
 data_corrected %&gt;% filter(data_source_name != &quot;RASFF Portal&quot;) %&gt;% 
                    filter(notified_country_EU == &quot;UK&quot;) %&gt;% 
-                   count(data_source, date_published_year, sort=T) %&gt;% 
+                   count(data_source , date_published_year, sort=T) %&gt;% 
                    arrange(data_source)</code></pre>
 <pre><code>## # A tibble: 5 x 3
 ##   data_source               date_published_year     n
@@ -735,6 +783,29 @@ data_corrected %&gt;% filter(data_source_name != &quot;RASFF Portal&quot;) %&gt;
 ## 2 Iceland        recall         2
 ## 3 China          recall         1
 ## 4 France         recall         1</code></pre>
+<pre class="r"><code># FSA and TS UK alerts %
+data_corrected %&gt;% filter(notified_country_EU == &quot;UK&quot;) %&gt;% 
+                   filter(data_source %in% c(&quot;Trading Standards (UK)&quot;, &quot;FSA Alerts &amp; Recalls (UK)&quot;)) %&gt;% 
+                   count(origin_country,  sort=T) </code></pre>
+<pre><code>## # A tibble: 12 x 2
+##    origin_country               n
+##    &lt;chr&gt;                    &lt;int&gt;
+##  1 United Kingdom            1462
+##  2 Iceland                     15
+##  3 Ireland                     10
+##  4 Ethiopia                     3
+##  5 Cyprus                       2
+##  6 France                       2
+##  7 India                        2
+##  8 Netherlands                  2
+##  9 Turkey                       2
+## 10 United States of America     2
+## 11 Canada                       1
+## 12 China                        1</code></pre>
+<pre class="r"><code>                  #filter(origin_country != &quot;United Kingdom&quot;) %&gt;% pull(n) %&gt;% sum()
+
+
+#1462/(1462+42)</code></pre>
 <pre class="r"><code># UK notifications within RAFSS include a variety of things outside the UK
 
 # notified by the UK; grouped by alert type +  by country of origin
@@ -823,6 +894,106 @@ data_corrected %&gt;% filter(data_source_name != &quot;RASFF Portal&quot;) %&gt;
 ## 12 Food Authority (Norway)                            1
 ## 13 Food Authority (Poland)                            1
 ## 14 NVWA Recalls (Netherlands)                         1</code></pre>
+<pre class="r"><code># how many EU and non-EU harards are identified in the UK by different alert systems
+data_corrected %&gt;% filter(notified_country_EU ==&quot;UK&quot;) %&gt;% 
+                  filter(origin_country_EU %in% c(&quot;non_EU&quot;, &quot;EU&quot;)) %&gt;% 
+                   count(data_source,  sort=T)</code></pre>
+<pre><code>## # A tibble: 3 x 2
+##   data_source                   n
+##   &lt;chr&gt;                     &lt;int&gt;
+## 1 RASFF Portal               1032
+## 2 FSA Alerts &amp; Recalls (UK)    38
+## 3 Trading Standards (UK)        4</code></pre>
+<pre class="r"><code>#1032/(1032+4+38) # 96% RASFF</code></pre>
+<pre class="r"><code># what product categories get most alrt by non-RAFSS
+data_corrected %&gt;% filter(data_source_name != &quot;RASFF Portal&quot;) %&gt;% 
+  count(product_categoty, sort=T)</code></pre>
+<pre><code>## # A tibble: 33 x 2
+##    product_categoty                                 n
+##    &lt;chr&gt;                                        &lt;int&gt;
+##  1 fruits and vegetables                         3211
+##  2 meat and meat products (other than poultry)   3049
+##  3 &lt;NA&gt;                                          2989
+##  4 cereals and bakery products                   1692
+##  5 milk and milk products                        1245
+##  6 poultry meat and poultry meat products        1205
+##  7 fish and fish products                        1119
+##  8 nuts; nut products and seeds                   868
+##  9 cocoa and cocoa preparations; coffee and tea   634
+## 10 prepared dishes and snacks                     575
+## # … with 23 more rows</code></pre>
+<pre class="r"><code># by country
+data_corrected %&gt;% filter(data_source_name != &quot;RASFF Portal&quot;) %&gt;% 
+  count(product_categoty, origin_country,  sort=T) </code></pre>
+<pre><code>## # A tibble: 933 x 3
+##    product_categoty                            origin_country               n
+##    &lt;chr&gt;                                       &lt;chr&gt;                    &lt;int&gt;
+##  1 meat and meat products (other than poultry) Canada                    1521
+##  2 fruits and vegetables                       Canada                     896
+##  3 &lt;NA&gt;                                        Canada                     867
+##  4 meat and meat products (other than poultry) United States of America   688
+##  5 fruits and vegetables                       United States of America   640
+##  6 cereals and bakery products                 Canada                     618
+##  7 &lt;NA&gt;                                        United States of America   604
+##  8 fish and fish products                      Canada                     460
+##  9 poultry meat and poultry meat products      Canada                     433
+## 10 poultry meat and poultry meat products      United States of America   370
+## # … with 923 more rows</code></pre>
+<pre class="r"><code># without canada, US, UK
+data_corrected %&gt;% filter(data_source_name != &quot;RASFF Portal&quot;) %&gt;% 
+  count(product_categoty, origin_country,  sort=T) %&gt;% 
+  filter(!origin_country %in% c(&quot;Canada&quot;, &quot;United States of America&quot;, &quot;United Kingdom&quot;))</code></pre>
+<pre><code>## # A tibble: 852 x 3
+##    product_categoty                            origin_country     n
+##    &lt;chr&gt;                                       &lt;chr&gt;          &lt;int&gt;
+##  1 milk and milk products                      France           204
+##  2 fruits and vegetables                       France           147
+##  3 &lt;NA&gt;                                        France           139
+##  4 fruits and vegetables                       China            131
+##  5 meat and meat products (other than poultry) France           117
+##  6 fruits and vegetables                       Belgium          114
+##  7 &lt;NA&gt;                                        Italy            109
+##  8 &lt;NA&gt;                                        Slovakia         107
+##  9 &lt;NA&gt;                                        Luxembourg        99
+## 10 &lt;NA&gt;                                        China             98
+## # … with 842 more rows</code></pre>
+<pre class="r"><code># without EU countries
+data_corrected %&gt;% filter(data_source_name != &quot;RASFF Portal&quot;) %&gt;% 
+  filter(origin_country_EU != &quot;EU&quot;) %&gt;% 
+  count(product_categoty, origin_country,  sort=T) %&gt;% 
+  filter(!origin_country %in% c(&quot;Canada&quot;, &quot;United States of America&quot;, &quot;United Kingdom&quot;)) </code></pre>
+<pre><code>## # A tibble: 483 x 3
+##    product_categoty                            origin_country     n
+##    &lt;chr&gt;                                       &lt;chr&gt;          &lt;int&gt;
+##  1 fruits and vegetables                       China            131
+##  2 &lt;NA&gt;                                        China             98
+##  3 crustaceans and products thereof            Vietnam           68
+##  4 cereals and bakery products                 Australia         65
+##  5 fish and fish products                      Vietnam           57
+##  6 cereals and bakery products                 New Zealand       54
+##  7 fruits and vegetables                       Australia         54
+##  8 &lt;NA&gt;                                        Australia         47
+##  9 meat and meat products (other than poultry) New Zealand       46
+## 10 &lt;NA&gt;                                        Norway            46
+## # … with 473 more rows</code></pre>
+<pre class="r"><code>data_corrected %&gt;% filter(data_source_name != &quot;RASFF Portal&quot;) %&gt;% 
+  filter(origin_country_EU != &quot;EU&quot;) %&gt;% 
+  #filter(!origin_country %in% c(&quot;Canada&quot;, &quot;United States of America&quot;, &quot;United Kingdom&quot;)) %&gt;% 
+  count(product_categoty, sort=T) </code></pre>
+<pre><code>## # A tibble: 32 x 2
+##    product_categoty                                 n
+##    &lt;chr&gt;                                        &lt;int&gt;
+##  1 meat and meat products (other than poultry)   2526
+##  2 fruits and vegetables                         2503
+##  3 &lt;NA&gt;                                          2161
+##  4 cereals and bakery products                   1369
+##  5 poultry meat and poultry meat products         958
+##  6 fish and fish products                         896
+##  7 milk and milk products                         752
+##  8 nuts; nut products and seeds                   569
+##  9 prepared dishes and snacks                     486
+## 10 cocoa and cocoa preparations; coffee and tea   460
+## # … with 22 more rows</code></pre>
 </div>
 <div id="lets-see-what-its-like-for-norway" class="section level2">
 <h2>Let’s see what it’s like for Norway</h2>
@@ -907,6 +1078,77 @@ data_corrected %&gt;% filter(data_source_name != &quot;RASFF Portal&quot;) %&gt;
 ## 10 United States of America     8
 ## # … with 25 more rows</code></pre>
 <p>Something else</p>
+<pre class="r"><code>data_corrected %&gt;%
+  filter(food_feed_fcm == &quot;food&quot;) %&gt;%
+  count(product_categoty, sort=T)</code></pre>
+<pre><code>## # A tibble: 31 x 2
+##    product_categoty                                      n
+##    &lt;chr&gt;                                             &lt;int&gt;
+##  1 fruits and vegetables                              5290
+##  2 meat and meat products (other than poultry)        3999
+##  3 &lt;NA&gt;                                               2966
+##  4 poultry meat and poultry meat products             2518
+##  5 fish and fish products                             2312
+##  6 cereals and bakery products                        2146
+##  7 nuts; nut products and seeds                       1936
+##  8 milk and milk products                             1611
+##  9 dietetic foods; food supplements; fortified foods  1379
+## 10 herbs and spices                                   1021
+## # … with 21 more rows</code></pre>
+<pre class="r"><code>data_corrected %&gt;%
+  filter(food_feed_fcm == &quot;food&quot;) %&gt;% 
+  filter(is.na(product_categoty)) %&gt;% 
+  count(product, sort=T)</code></pre>
+<pre><code>## # A tibble: 558 x 2
+##    product            n
+##    &lt;chr&gt;          &lt;int&gt;
+##  1 &lt;NA&gt;            1813
+##  2 bakery product    83
+##  3 food              61
+##  4 beef              27
+##  5 product           25
+##  6 pork              22
+##  7 shell             22
+##  8 meat product      18
+##  9 sugar             15
+## 10 sweetcorn         12
+## # … with 548 more rows</code></pre>
+<pre class="r"><code>data_corrected %&gt;%
+  filter(food_feed_fcm == &quot;food&quot;) %&gt;%
+  filter(data_source_country ==&quot;UK&quot;) %&gt;% 
+  count(product_categoty, sort=T)</code></pre>
+<pre><code>## # A tibble: 23 x 2
+##    product_categoty                                 n
+##    &lt;chr&gt;                                        &lt;int&gt;
+##  1 fruits and vegetables                          292
+##  2 cereals and bakery products                    200
+##  3 &lt;NA&gt;                                           155
+##  4 meat and meat products (other than poultry)    112
+##  5 poultry meat and poultry meat products          89
+##  6 other food product / mixed                      85
+##  7 milk and milk products                          82
+##  8 herbs and spices                                79
+##  9 nuts; nut products and seeds                    68
+## 10 cocoa and cocoa preparations; coffee and tea    62
+## # … with 13 more rows</code></pre>
+<pre class="r"><code>data_corrected %&gt;%
+  filter(food_feed_fcm == &quot;food&quot;) %&gt;%
+  filter(data_source_country ==&quot;EU&quot;) %&gt;% 
+  count(product_categoty, sort=T)</code></pre>
+<pre><code>## # A tibble: 30 x 2
+##    product_categoty                                      n
+##    &lt;chr&gt;                                             &lt;int&gt;
+##  1 fruits and vegetables                              2079
+##  2 poultry meat and poultry meat products             1313
+##  3 fish and fish products                             1193
+##  4 nuts; nut products and seeds                       1068
+##  5 dietetic foods; food supplements; fortified foods  1033
+##  6 meat and meat products (other than poultry)         950
+##  7 herbs and spices                                    462
+##  8 cereals and bakery products                         454
+##  9 bivalve molluscs and products thereof               368
+## 10 milk and milk products                              366
+## # … with 20 more rows</code></pre>
 </div>
 
 

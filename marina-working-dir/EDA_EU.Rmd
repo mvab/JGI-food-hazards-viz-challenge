@@ -173,6 +173,27 @@ data_corrected %>% write_csv("../data/tidy/food_hazards_data_all.csv")
 
 
 ```{r}
+# count how many per country
+
+data_tmp <- read_csv("../data/tidy/food_hazards_data_all.csv") 
+
+count_per_origin<-
+  data_tmp %>% filter(notified_country_EU =="UK") %>% 
+            count(origin_country, sort=T) %>% 
+            rename('alerts_from_origin'='n')
+
+
+data_tmp<- data_tmp %>% 
+  filter(notified_country_EU =="UK") %>% left_join(., count_per_origin, by = "origin_country")
+
+data_tmp %>% write_csv("../data/tidy/food_hazards_data_UK_notified_tmp.csv")
+
+```
+
+
+
+
+```{r}
 ggplot(data_corrected, aes(x = data_source_country,  fill = notified_country_EU)) + 
   geom_bar()+
   theme_minimal_hgrid(14, rel_small = 1)+
@@ -271,7 +292,7 @@ data_corrected %>%
 # NB only in recent years
 data_corrected %>% filter(data_source_name != "RASFF Portal") %>% 
                    filter(notified_country_EU == "UK") %>% 
-                   count(data_source, date_published_year, sort=T) %>% 
+                   count(data_source , date_published_year, sort=T) %>% 
                    arrange(data_source)
 ```
 ```{r}
@@ -290,6 +311,19 @@ data_corrected %>% filter(data_source_name != "RASFF Portal") %>%
                    filter(data_source == "Trading Standards (UK)") %>% 
                    count(origin_country, alert_type, sort=T)
 ```
+```{r}
+# FSA and TS UK alerts %
+data_corrected %>% filter(notified_country_EU == "UK") %>% 
+                   filter(data_source %in% c("Trading Standards (UK)", "FSA Alerts & Recalls (UK)")) %>% 
+                   count(origin_country,  sort=T) 
+                  #filter(origin_country != "United Kingdom") %>% pull(n) %>% sum()
+
+
+#1462/(1462+42)
+```
+
+
+
 ```{r}
 # UK notifications within RAFSS include a variety of things outside the UK
 
@@ -326,6 +360,51 @@ data_corrected %>% filter(data_source_name != "RASFF Portal") %>%
                    count(data_source, sort=T)
 
 ```
+
+
+```{r}
+# how many EU and non-EU harards are identified in the UK by different alert systems
+data_corrected %>% filter(notified_country_EU =="UK") %>% 
+                  filter(origin_country_EU %in% c("non_EU", "EU")) %>% 
+                   count(data_source,  sort=T)
+
+
+#1032/(1032+4+38) # 96% RASFF
+```
+
+
+```{r}
+# what product categories get most alrt by non-RAFSS
+data_corrected %>% filter(data_source_name != "RASFF Portal") %>% 
+  count(product_categoty, sort=T)
+
+# by country
+data_corrected %>% filter(data_source_name != "RASFF Portal") %>% 
+  count(product_categoty, origin_country,  sort=T) 
+
+# without canada, US, UK
+data_corrected %>% filter(data_source_name != "RASFF Portal") %>% 
+  count(product_categoty, origin_country,  sort=T) %>% 
+  filter(!origin_country %in% c("Canada", "United States of America", "United Kingdom"))
+
+# without EU countries
+data_corrected %>% filter(data_source_name != "RASFF Portal") %>% 
+  filter(origin_country_EU != "EU") %>% 
+  count(product_categoty, origin_country,  sort=T) %>% 
+  filter(!origin_country %in% c("Canada", "United States of America", "United Kingdom")) 
+  
+
+data_corrected %>% filter(data_source_name != "RASFF Portal") %>% 
+  filter(origin_country_EU != "EU") %>% 
+  #filter(!origin_country %in% c("Canada", "United States of America", "United Kingdom")) %>% 
+  count(product_categoty, sort=T) 
+  
+
+
+
+```
+
+
 
 
 
@@ -385,8 +464,29 @@ Something else
 
 
 ```{r}
+data_corrected %>%
+  filter(food_feed_fcm == "food") %>%
+  count(product_categoty, sort=T)
+  
+  
+data_corrected %>%
+  filter(food_feed_fcm == "food") %>% 
+  filter(is.na(product_categoty)) %>% 
+  count(product, sort=T)
 
-```
+
+data_corrected %>%
+  filter(food_feed_fcm == "food") %>%
+  filter(data_source_country =="UK") %>% 
+  count(product_categoty, sort=T)
+  
+
+data_corrected %>%
+  filter(food_feed_fcm == "food") %>%
+  filter(data_source_country =="EU") %>% 
+  count(product_categoty, sort=T)
+  
+
 
 
 
