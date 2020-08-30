@@ -1,4 +1,6 @@
-## Background
+## Too much tooty in the fruity: Keeping food safe in a post-Brexit Britain
+
+### Background
 
 The United Kingdom is scheduled to leave the European Union at the end of 2020 following results of a referendum in 2016. Final exit deal details are still being negotiated in the currently ongoing transitional period, but it is inevitable that food trade and safety will be affected.
 
@@ -8,7 +10,7 @@ The United Kingdom will lose access to RASFF data after Brexit in case of no-dea
 
 In dataset provided for this challenge, around 40% of alerts come from RASFF. For the UK, RASFF provides the majority of alerts on imported food from Europe and the rest of the World. The UK’s internal systems, which include FSA (Food Standards Agency) and Trading Standards, provide the alerts mostly on food originated within the UK.
 
-## Food hazard alerts in the UK
+### Food hazard alerts in the UK
 
 We visualised where the food hazards identified in the UK come from. The lines show the countries of origin for food imports to the UK, and the map density* shows where the most food hazard alerts originate from. 
 
@@ -23,7 +25,7 @@ We show two views: 1) EU alert system notifications (RASFF) and 2) UK internal n
 **UK-internal alerts:** | [interactive version of the map](content/kepler_notifications_about_UK_by_UK.html) | [static version of the map](content/notifications_about_UK_by_UK.png)
 
 
-## Closer look at Fruit and Veg
+### Closer look at Fruit and Veg
 
 Systems will need to be put in place to make up for the loss of information from RASFF alerts. An increase on tariffs for EU-produced food after Brexit [5] will likely cause an uptick in importers buying from outside of the union, which would bring an accompanying shift to the makeup of food hazards that such systems will need to detect. The following graphics briefly explore how this shift might materialize for the UK’s biggest food import [6]: fruits and vegetables.
 
