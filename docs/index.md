@@ -1,6 +1,3 @@
-### Too much tooty in the fruity: Keeping food safe in a post-Brexit Britain
-
-### Background
 
 The United Kingdom is scheduled to leave the European Union at the end of 2020 following results of a referendum in 2016. Final exit deal details are still being negotiated in the currently ongoing transitional period, but it is inevitable that food trade and safety will be affected.
 
