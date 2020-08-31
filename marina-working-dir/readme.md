@@ -1,5 +1,6 @@
 *\* clone/pull directory to view EDA html reports \**
 
+
 `EDA.Rmd` is the main data cleaning script. Also includes: 
 
  - adds tidy timepoints for 'over time' visualisations
@@ -14,11 +15,3 @@ Other EDA scripts look at specific hazards (using tidy output file from the main
 
 `EDA_plastic.Rmd` explore hazards from various foreign bodies (plastic, glass, metal, insects). Finds these hazards in other categories (not just the predefined "foreign bodies" category); visualises them over time;
 
-
-[interactive version of the map](content/kepler_notifications_about_UK_by_UK.html) 
-
-[interactive version of the map](https://github.com/mvab/JGI-food-hazards-viz-challenge/content/kepler_notifications_about_UK_by_UK.html) 
-
-[interactive version of the map](https://github.com/mvab/JGI-food-hazards-viz-challenge/docs/content/kepler_notifications_about_UK_by_UK.html) 
-
-[interactive version of the map](https://github.com/mvab/JGI-food-hazards-viz-challenge/marina-working-dir/EDA.html) 
