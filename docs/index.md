@@ -17,7 +17,7 @@ We show two views: 1) EU alert system notifications (RASFF) and 2) UK internal n
 <img src="content/RAFSS_vs_UK_alerts.gif" width="1000">  
 
 
-**EU alerts (RASFF):** | [interactive version of the map](content/kepler_notifications_about_UK_all.html) | [static version of the map](content/notifications_about_UK_all.png)
+**EU alerts (RASFF):** | [interactive version of the map](content/kepler_notifications_about_UK_all.html) **\*view this!\*** | [static version of the map](content/notifications_about_UK_all.png)
 
 **UK-internal alerts:** | [interactive version of the map](content/kepler_notifications_about_UK_by_UK.html) | [static version of the map](content/notifications_about_UK_by_UK.png)
 
