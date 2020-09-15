@@ -9,14 +9,15 @@ The entry for the challenge is available here: https://mvab.github.io/JGI-food-h
 Below are some outtakes from out KeplerGL visualisation attempts, which are too pretty to not show anyone: 
 
 
-<img src="marina-working-dir//RAFSS_vs_UK_alerts.gif" width="1000">  
-
-
- <img src="marina-working-dir/keplerGL/kepler_viz_attempts/alert_origins_density.png" width="1000">  
- <img src="marina-working-dir/keplerGL/kepler_viz_attempts/alert_types.png" width="1000">  
- <img src="marina-working-dir/keplerGL/kepler_viz_attempts/allergens.png" width="1000">  
+_Food hazard alert origins_
+ <img src="marina-working-dir/keplerGL/kepler_viz_attempts/alert_origins_density.png" width="1000"> 
+_Countries that notify about hazards_
  <img src="marina-working-dir/keplerGL/kepler_viz_attempts/countries_that_notify.png" width="1000">  
- <img src="marina-working-dir/keplerGL/kepler_viz_attempts/hazards_grouped.png" width="1000">  
+
+ <img src="marina-working-dir/keplerGL/kepler_viz_attempts/alert_types.png" width="1000">  
+ <img src="marina-working-dir/keplerGL/kepler_viz_attempts/hazards_grouped.png" width="1000">
+ 
+ <img src="marina-working-dir/keplerGL/kepler_viz_attempts/allergens.png" width="1000">  
  <img src="marina-working-dir/keplerGL/kepler_viz_attempts/plastic_pollution.png" width="1000">  
 
 
