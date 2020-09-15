@@ -1,8 +1,10 @@
 # JGI-food-hazards-viz-challenge
 
-This repo contains the work from Jean Golding Institute Food hazards [data visualisation challenge][1]
+This repo contains the work done for Jean Golding Institute Food hazards [data visualisation challenge][1]
 
-The sumbission for the challenge is available here: https://mvab.github.io/JGI-food-hazards-viz-challenge/
+The entry for the challenge is available here: https://mvab.github.io/JGI-food-hazards-viz-challenge/
+
+<br>
 
 Below are some outtakes from out KeplerGL visualisation attempts, which are too pretty to not show anyone: 
 
