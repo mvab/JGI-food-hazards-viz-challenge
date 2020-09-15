@@ -6,7 +6,7 @@ The entry for the challenge is available here: https://mvab.github.io/JGI-food-h
 
 <br>
 
-Below are some outtakes from out KeplerGL visualisation attempts, which are too pretty to not show anyone: 
+Below are some outtakes from our KeplerGL visualisation attempts, which are too pretty to not show anyone: 
 
 
 _Food hazard alert origins_
