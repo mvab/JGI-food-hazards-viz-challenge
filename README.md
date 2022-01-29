@@ -4,6 +4,11 @@ This repo contains the work done for Jean Golding Institute Food hazards [data v
 
 The entry for the challenge is available here: https://mvab.github.io/JGI-food-hazards-viz-challenge/
 
+:tada: We won the runner-up prize in the challenge: [JGI blogpost announcing winners](https://jeangoldinginstitute.blogs.bristol.ac.uk/2020/09/16/food-hazards-from-around-the-world-data-competition/)
+
+:nerd_face: We wrote a [blogpost](https://ieureka.blogs.bristol.ac.uk/2020/10/06/visualising-brexits-impact-on-food-safety-in-britain/) for IUEREKA about our data visualisation. 
+
+
 <br>
 
 Below are some outtakes from our KeplerGL visualisation attempts, which are too pretty to not show anyone: 
